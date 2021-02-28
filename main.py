@@ -1,4 +1,4 @@
-from feature import FeatureTemplate
+from data import FeatureTemplate
 
 
 
