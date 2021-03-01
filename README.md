@@ -1,14 +1,14 @@
 # QFinDataAnalysisToolKit
-features:
+Features:
 
-Efficient memory management
+-efficient memory management
 
-Auto initial model search
+-auto initial model search
 
-portable
+-portable
 
-easy feature engineering
+-easy feature engineering
 
-missing value handling with tree models
+-missing value handling with tree models
 
-numerical discretization
+-numerical discretization
