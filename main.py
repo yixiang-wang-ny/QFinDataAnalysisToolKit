@@ -10,6 +10,9 @@ def main():
     session = QFinDASession()
     session.add_data_from_data_frame(df)
 
+    session.data_layer.get('weight')
+    return
+
 
 if __name__ == '__main__':
 

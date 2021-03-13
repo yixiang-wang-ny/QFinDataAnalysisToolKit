@@ -1,6 +1,7 @@
 import datetime as dt
 import pandas as pd
 from data.feature import FeatureOnPandasDataFrame
+from collections import OrderedDict
 
 
 class Data(object):
@@ -10,7 +11,7 @@ class Data(object):
         if data_id is None:
             self.data_id = int(dt.datetime.now().strftime('%Y%m%d%H%M%S'))
 
-        self.feature_map = {}
+        self.feature_map = OrderedDict()
 
     def add_from_data_frame(self, df, exclude_fields):
 
@@ -25,4 +26,8 @@ class Data(object):
 
     def get(self, field):
 
-        return self.feature_map[field].get()
+        return self.feature_map[field].get_data().values
+
+    def get_columns(self):
+
+        return self.feature_map.keys()
