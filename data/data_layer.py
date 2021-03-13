@@ -24,9 +24,13 @@ class Data(object):
 
             self.feature_map[feature.name] = feature
 
-    def get(self, field):
+    def get_data_array(self, field):
 
-        return self.feature_map[field].get_data().values
+        return self.feature_map[field].get_data()
+
+    def get_data_frame(self, field):
+
+        return pd.DataFrame({field: self.feature_map[field].get_data()})
 
     def get_columns(self):
 

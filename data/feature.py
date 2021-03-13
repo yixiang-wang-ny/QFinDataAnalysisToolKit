@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from pandas.api.types import is_string_dtype
 from pandas.api.types import is_numeric_dtype
+import numpy as np
+import pandas as pd
 
 
 class FeatureTemplate(ABC):
@@ -8,7 +10,7 @@ class FeatureTemplate(ABC):
     name = None
 
     @abstractmethod
-    def get_data(self):
+    def get_data(self) -> np.array:
         return
 
     @abstractmethod
@@ -26,7 +28,7 @@ class FeatureTemplate(ABC):
 
 class FeatureOnPandasDataFrame(FeatureTemplate):
 
-    def __init__(self, name, underlying_data_frame):
+    def __init__(self, name: str, underlying_data_frame: pd.DataFrame):
 
         self.name = name
         self.underlying_data_frame = underlying_data_frame
@@ -35,7 +37,7 @@ class FeatureOnPandasDataFrame(FeatureTemplate):
         self._is_factor = not self._is_numeric
 
     def get_data(self):
-        return self.underlying_data_frame[self.name]
+        return self.underlying_data_frame[self.name].values
 
     def is_numeric(self):
         return self._is_numeric
