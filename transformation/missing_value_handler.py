@@ -8,11 +8,11 @@ from data.feature import FeatureTemplate
 class MissingValueHandler(ABC):
 
     @abstractmethod
-    def train(self, features: List[FeatureTemplate]):
+    def train(self, feature: FeatureTemplate):
         pass
 
     @abstractmethod
-    def apply(self, features: List[FeatureTemplate]):
+    def apply(self, feature: FeatureTemplate):
         pass
 
 
