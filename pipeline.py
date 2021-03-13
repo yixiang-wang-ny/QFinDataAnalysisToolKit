@@ -56,6 +56,7 @@ class QFinPipeLine(object):
 class QFinPipe(QFinPipeTemplate):
 
     def append(self, downstream_q_fin_pipes: [QFinPipeTemplate] or QFinPipeTemplate) -> QFinPipeTemplate:
+
         if isinstance(downstream_q_fin_pipes, Iterable):
             self.down_stream_pipelines.extend(downstream_q_fin_pipes)
         else:
@@ -73,21 +74,30 @@ class QFinPipe(QFinPipeTemplate):
 
 class TestQFinPipe1(QFinPipe):
 
-    pass
+    def train(self, features: [FeatureTemplate]):
+        return features
 
 
 class TestQFinPipe2(QFinPipe):
-    pass
+
+    def train(self, features: [FeatureTemplate]):
+        return features
 
 
 class TestQFinPipe3(QFinPipe):
-    pass
+
+    def train(self, features: [FeatureTemplate]):
+        return features
 
 
 class TestQFinPipe4(QFinPipe):
-    pass
+
+    def train(self, features: [FeatureTemplate]):
+        return features
 
 
 class TestQFinPipe5(QFinPipe):
-    pass
+
+    def train(self, features: [FeatureTemplate]):
+        return features
 
