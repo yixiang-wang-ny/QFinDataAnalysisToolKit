@@ -1,21 +1,39 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from collections.abc import Iterable
+from data.feature import FeatureTemplate
 
 
 class QFinPipeTemplate(ABC):
 
-    pass
+    @abstractmethod
+    def train(self, features: [FeatureTemplate]):
+        pass
 
 
-class QFinPipeLineRunner(object):
+class QFinPipeLine(object):
 
     def __init__(self):
 
-        self.pipe_items = []
+        self.pipe_items: [[QFinPipeTemplate]] = []
 
     def add(self, pipe_layer: [QFinPipeTemplate] or QFinPipeTemplate):
 
-        self.pipe_items.append(pipe_layer)
+        if isinstance(pipe_layer, Iterable):
+            self.pipe_items.append(pipe_layer)
+        else:
+            self.pipe_items.append([pipe_layer])
+
+    def train(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+
+        for item in self.pipe_items:
+
+            item_res = []
+            for pipe in item:
+                item_res.extend(pipe.train(features))
+
+            features = item_res
+
+        return features
 
 
 class QFinPipe(QFinPipeTemplate):
@@ -23,10 +41,6 @@ class QFinPipe(QFinPipeTemplate):
     def __init__(self):
 
         self.down_stream_pipelines: [QFinPipeTemplate] = []
-
-    def input(self):
-
-        pass
 
     def append(self, downstream_q_fin_pipes: [QFinPipeTemplate] or QFinPipeTemplate) -> QFinPipeTemplate:
         if isinstance(downstream_q_fin_pipes, Iterable):
@@ -37,11 +51,9 @@ class QFinPipe(QFinPipeTemplate):
         return self
 
     def train(self):
-
         pass
 
     def apply(self):
-
         pass
 
 

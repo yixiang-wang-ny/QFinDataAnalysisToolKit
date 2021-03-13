@@ -13,15 +13,21 @@ def main():
     session.data.set_time_series_id('date')
     session.data.set_target_columns('resp')
 
-    pipe_runner = pipeline.QFinPipeLineRunner()
+    pipe_runner = pipeline.QFinPipeLine()
 
-    pip1 = pipeline.TestQFinPipe1()
-    pip2 = pipeline.TestQFinPipe2()
-    pip3 = pipeline.TestQFinPipe3()
-    pip4 = pipeline.TestQFinPipe4()
+    pipe_runner.add(
+        pipeline.TestQFinPipe1().append(
+            pipeline.TestQFinPipe2().append(
+                [pipeline.TestQFinPipe3(), pipeline.TestQFinPipe4()]
+            )
+        )
+    )
 
-    pip1.append(pip2)
-    pip2.append([pip3, pip4])
+    pipe_runner.add(
+        pipeline.TestQFinPipe5()
+    )
+
+    pipe_runner.train(session.data)
 
 
 
