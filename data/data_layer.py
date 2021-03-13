@@ -30,21 +30,21 @@ class Data(object):
 
     def set_time_series_id(self, ts_id_names):
 
-        if isinstance(ts_id_names, Iterable):
+        if not isinstance(ts_id_names, str):
             self.ts_ids.extend(ts_id_names)
         else:
             self.ts_ids.append(ts_id_names)
 
     def set_securities_ids(self, securities_id_names):
 
-        if isinstance(securities_id_names, Iterable):
+        if not isinstance(securities_id_names, str):
             self.securities_ids.extend(securities_id_names)
         else:
             self.securities_ids.append(securities_id_names)
 
     def set_target_columns(self, target_columns):
 
-        if isinstance(target_columns, Iterable):
+        if not isinstance(target_columns, str):
             self.target_columns.extend(target_columns)
         else:
             self.target_columns.append(target_columns)
@@ -56,6 +56,12 @@ class Data(object):
     def get_data_frame(self, field):
 
         return pd.DataFrame({field: self.feature_map[field].get_data()})
+
+    def get_all_features(self):
+        return [
+            v for k, v in self.feature_map.items()
+            if k not in self.securities_ids and k not in self.ts_ids and k not in self.target_columns
+        ]
 
     def get_columns(self):
 

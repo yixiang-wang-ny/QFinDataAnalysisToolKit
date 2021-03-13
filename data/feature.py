@@ -8,6 +8,12 @@ class FeatureTemplate(ABC):
 
     name = None
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
     @abstractmethod
     def get_data(self) -> np.array:
         return

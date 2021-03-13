@@ -5,8 +5,9 @@ from data.feature import FeatureTemplate
 
 class QFinPipeTemplate(ABC):
 
-    def __init__(self):
+    def __init__(self, input_features=None):
 
+        self.input_features = input_features
         self.down_stream_pipelines: [QFinPipeTemplate] = []
 
     @abstractmethod
@@ -15,7 +16,10 @@ class QFinPipeTemplate(ABC):
 
     def train_pip(self, features: [FeatureTemplate]):
 
-        features = self.train(features)
+        if self.input_features is None:
+            features = self.train(features)
+        else:
+            features = self.train([x for x in features if x.name in self.input_features])
 
         if len(self.down_stream_pipelines) == 0:
             return features
@@ -75,29 +79,49 @@ class QFinPipe(QFinPipeTemplate):
 class TestQFinPipe1(QFinPipe):
 
     def train(self, features: [FeatureTemplate]):
+
+        for x in features:
+            x.data = []
+
         return features
 
 
 class TestQFinPipe2(QFinPipe):
 
     def train(self, features: [FeatureTemplate]):
+
+        for x in features:
+            x.data.append(2)
+
         return features
 
 
 class TestQFinPipe3(QFinPipe):
 
     def train(self, features: [FeatureTemplate]):
+
+        for x in features:
+            x.data.append(3)
+
         return features
 
 
 class TestQFinPipe4(QFinPipe):
 
     def train(self, features: [FeatureTemplate]):
+
+        for x in features:
+            x.data.append(4)
+
         return features
 
 
 class TestQFinPipe5(QFinPipe):
 
     def train(self, features: [FeatureTemplate]):
+
+        for x in features:
+            x.data.append(5)
+
         return features
 
