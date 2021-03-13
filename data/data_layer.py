@@ -15,9 +15,13 @@ class Data(object):
     def add_from_csv(self, csv_path):
 
         df = pd.read_csv(csv_path)
+        self.add_from_data_frame(df)
+
+    def add_from_data_frame(self, df):
         for col in df:
             feature = FeatureOnPandasDataFrame(col, df)
 
             self.feature_map[feature.name] = feature
+
 
 
