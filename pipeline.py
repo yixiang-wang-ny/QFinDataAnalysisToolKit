@@ -5,9 +5,26 @@ from data.feature import FeatureTemplate
 
 class QFinPipeTemplate(ABC):
 
+    def __init__(self):
+
+        self.down_stream_pipelines: [QFinPipeTemplate] = []
+
     @abstractmethod
     def train(self, features: [FeatureTemplate]):
         pass
+
+    def train_pip(self, features: [FeatureTemplate]):
+
+        features = self.train(features)
+
+        if len(self.down_stream_pipelines) == 0:
+            return features
+
+        down_stream_res = []
+        for down_stream_pipe in self.down_stream_pipelines:
+            down_stream_res.extend(down_stream_pipe.train(features))
+
+        return down_stream_res
 
 
 class QFinPipeLine(object):
@@ -29,7 +46,7 @@ class QFinPipeLine(object):
 
             item_res = []
             for pipe in item:
-                item_res.extend(pipe.train(features))
+                item_res.extend(pipe.train_pip(features))
 
             features = item_res
 
@@ -37,10 +54,6 @@ class QFinPipeLine(object):
 
 
 class QFinPipe(QFinPipeTemplate):
-
-    def __init__(self):
-
-        self.down_stream_pipelines: [QFinPipeTemplate] = []
 
     def append(self, downstream_q_fin_pipes: [QFinPipeTemplate] or QFinPipeTemplate) -> QFinPipeTemplate:
         if isinstance(downstream_q_fin_pipes, Iterable):
@@ -50,8 +63,9 @@ class QFinPipe(QFinPipeTemplate):
 
         return self
 
-    def train(self):
-        pass
+    def train(self, features: [FeatureTemplate]):
+
+        return features
 
     def apply(self):
         pass
