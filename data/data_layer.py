@@ -1,6 +1,6 @@
 import datetime as dt
 import pandas as pd
-from data.feature import FeatureOnPandasDataFrame
+from data.feature import FeatureSeries
 from collections import OrderedDict
 from collections.abc import Iterable
 
@@ -24,7 +24,7 @@ class Data(object):
             if col in exclude_fields:
                 continue
 
-            feature = FeatureOnPandasDataFrame(col, df)
+            feature = FeatureSeries(col, df)
 
             self.feature_map[feature.name] = feature
 
