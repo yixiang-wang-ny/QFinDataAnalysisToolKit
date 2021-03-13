@@ -8,7 +8,7 @@ class QFinDASession(object):
 
         self.data_object_map = {}
 
-    def add_data_from_csv(self, csv_file_name):
+    def add_data_from_data_frame(self, csv_file_name, exclude_fields=(), target_fields=()):
 
         data_object = Data()
         data_object.add_from_csv(csv_file_name)

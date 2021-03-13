@@ -12,16 +12,17 @@ class Data(object):
 
         self.feature_map = {}
 
-    def add_from_csv(self, csv_path):
+    def add_from_data_frame(self, df, exclude_fields):
 
-        df = pd.read_csv(csv_path)
-        self.add_from_data_frame(df)
-
-    def add_from_data_frame(self, df):
         for col in df:
+
+            if col in exclude_fields:
+                continue
+
             feature = FeatureOnPandasDataFrame(col, df)
 
             self.feature_map[feature.name] = feature
 
+    def get(self, field):
 
-
+        return self.feature_map[field].get()
