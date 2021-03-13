@@ -1,10 +1,13 @@
-from data import FeatureTemplate
+from session import QFinDASession
 
 
+def main():
+
+    data_path = r'C:\Users\yixia\OneDrive\Files\Kaggle\jane-street-market-prediction\train.csv'
+    session = QFinDASession()
+    session.add_data_from_csv(data_path)
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
