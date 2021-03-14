@@ -21,10 +21,10 @@ def main():
     factor_feature_names = ['feature_0']
     float_value_feature_names = ['feature_{}'.format(x) for x in range(1, len(features))]
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
-    scale_pipe_line = MeanDeviationScaler(input_features=float_value_feature_names)
+    scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
 
     pipe_line.add([PipeSelect(input_features=factor_feature_names), missing_value_pipe])
-    pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe_line])
+    pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe])
 
     feature_out = pipe_line.train(features)
 
