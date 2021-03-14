@@ -46,6 +46,15 @@ class QFinPipe(ABC):
         return down_stream_res
 
 
+class PipeSelect(QFinPipe):
+
+    def train(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+        return features
+
+    def apply(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+        return features
+
+
 class QFinPipeLine(object):
 
     def __init__(self):

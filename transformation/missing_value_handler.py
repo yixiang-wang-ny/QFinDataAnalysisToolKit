@@ -1,25 +1,44 @@
-from abc import ABC, abstractmethod
-
+from pipeline import QFinPipe
 from typing import List
-
 from data.feature import FeatureTemplate
+from abc import abstractmethod
 
 
-class MissingValueHandler(ABC):
+class MissingValueHandler(QFinPipe):
+
+    def __init__(self, *args, **kwargs):
+
+        self.parameters_map: {str: float} = {}
+
+        super(MissingValueHandler, self).__init__(*args, **kwargs)
 
     @abstractmethod
-    def train(self, feature: FeatureTemplate):
+    def unconditional_expectation_measure(self, feature: FeatureTemplate):
         pass
 
-    @abstractmethod
-    def apply(self, feature: FeatureTemplate):
-        pass
+    def train(self, features: List[FeatureTemplate]):
+
+        for feature in features:
+            self.parameters_map[feature.name] = self.unconditional_expectation_measure(feature)
+
+        return self.apply(features)
+
+    def apply(self, features: List[FeatureTemplate]):
+
+        for feature in features:
+            feature.data = feature.data.fillna(self.parameters_map[feature.name])
+
+        return features
 
 
 class FillWithMedian(MissingValueHandler):
 
-    def train(self, features: List[FeatureTemplate]):
-        pass
+    def unconditional_expectation_measure(self, feature: FeatureTemplate):
+        return feature.data.median()
 
-    def apply(self, features: List[FeatureTemplate]):
-        pass
+
+class FillWithMean(MissingValueHandler):
+
+    def unconditional_expectation_measure(self, feature: FeatureTemplate):
+        return feature.data.mean()
+

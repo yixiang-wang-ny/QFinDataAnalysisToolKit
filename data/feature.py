@@ -14,6 +14,9 @@ class FeatureTemplate(ABC):
     def __repr__(self):
         return self.name
 
+    def __init__(self):
+        self.data: pd.Series = pd.Series()
+
     @abstractmethod
     def get_data(self) -> np.array:
         return
@@ -34,6 +37,8 @@ class FeatureTemplate(ABC):
 class FeatureSeries(FeatureTemplate):
 
     def __init__(self, name: str, underlying_data_frame: pd.DataFrame):
+
+        super(FeatureSeries, self).__init__()
 
         self.name = name
         self.data = underlying_data_frame[name].reset_index(drop=True)

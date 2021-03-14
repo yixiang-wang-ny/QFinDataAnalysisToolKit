@@ -1,5 +1,6 @@
 from session import QFinDASession
-from pipeline import QFinPipeLine, QFinPipe
+from pipeline import QFinPipeLine, QFinPipe, PipeSelect
+from transformation.missing_value_handler import FillWithMean
 import pandas as pd
 
 
@@ -53,24 +54,15 @@ def main():
 
     pipe_line = QFinPipeLine()
 
-    pipe_line.add(
-        TestQFinPipe1(input_features=["feature_1", "feature_2", "feature_3", "feature_4"]).append(
-            TestQFinPipe2().append(
-                [TestQFinPipe3(input_features=["feature_1"]),
-                 TestQFinPipe4(input_features=["feature_2", "feature_3"])]
-            )
-        )
-    )
+    missing_value_pipe = FillWithMean()
 
-    pipe_line.add(
-        TestQFinPipe5()
-    )
+    pipe_line.add(PipeSelect(input_features=["feature_1", "feature_2", "feature_3", "feature_4", "feature_129"]))
+    pipe_line.add(missing_value_pipe)
 
     features = session.data.get_all_features()
     feature_out = pipe_line.train(features)
 
-    for feature in feature_out:
-        print(feature.data)
+    return
 
 
 if __name__ == '__main__':
