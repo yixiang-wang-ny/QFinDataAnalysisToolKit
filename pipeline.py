@@ -14,7 +14,7 @@ class QFinPipeTemplate(ABC):
     def train(self, features: [FeatureTemplate]):
         pass
 
-    def train_pip(self, features: [FeatureTemplate]):
+    def train_pipe(self, features: [FeatureTemplate]):
 
         if self.input_features is None:
             features = self.train(features)
@@ -26,7 +26,7 @@ class QFinPipeTemplate(ABC):
 
         down_stream_res = []
         for down_stream_pipe in self.down_stream_pipelines:
-            down_stream_res.extend(down_stream_pipe.train_pip(features))
+            down_stream_res.extend(down_stream_pipe.train_pipe(features))
 
         return down_stream_res
 
@@ -50,7 +50,7 @@ class QFinPipeLine(object):
 
             item_res = []
             for pipe in item:
-                item_res.extend(pipe.train_pip(features))
+                item_res.extend(pipe.train_pipe(features))
 
             features = item_res
 
