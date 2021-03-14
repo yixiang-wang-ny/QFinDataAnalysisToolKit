@@ -1,5 +1,5 @@
 from session import QFinDASession
-import pipeline
+from pipeline import QFinPipeLine, TestQFinPipe1, TestQFinPipe2, TestQFinPipe3, TestQFinPipe4, TestQFinPipe5
 import pandas as pd
 
 
@@ -13,25 +13,26 @@ def main():
     session.data.set_time_series_id('date')
     session.data.set_target_columns('resp')
 
-    pipe_line = pipeline.QFinPipeLine()
+    pipe_line = QFinPipeLine()
 
     pipe_line.add(
-        pipeline.TestQFinPipe1(input_features=["feature_1", "feature_2", "feature_3", "feature_4"]).append(
-            pipeline.TestQFinPipe2().append(
-                [pipeline.TestQFinPipe3(input_features=["feature_1"]),
-                 pipeline.TestQFinPipe4(input_features=["feature_2", "feature_3"])]
+        TestQFinPipe1(input_features=["feature_1", "feature_2", "feature_3", "feature_4"]).append(
+            TestQFinPipe2().append(
+                [TestQFinPipe3(input_features=["feature_1"]),
+                 TestQFinPipe4(input_features=["feature_2", "feature_3"])]
             )
         )
     )
 
     pipe_line.add(
-        pipeline.TestQFinPipe5()
+        TestQFinPipe5()
     )
 
     features = session.data.get_all_features()
     feature_out = pipe_line.train(features)
 
-    return feature_out
+    for feature in feature_out:
+        print(feature.data)
 
 
 if __name__ == '__main__':
