@@ -1,6 +1,44 @@
 from session import QFinDASession
-from pipeline import QFinPipeLine, TestQFinPipe1, TestQFinPipe2, TestQFinPipe3, TestQFinPipe4, TestQFinPipe5
+from pipeline import QFinPipeLine, QFinPipe
 import pandas as pd
+
+
+class TestQFinPipe(QFinPipe):
+
+    add_num = None
+
+    def apply(self, features):
+        return
+
+    def train(self, features):
+
+        for x in features:
+            if not isinstance(x.data, list):
+                x.data = []
+            else:
+                x.data.append(self.add_num)
+
+        return features
+
+
+class TestQFinPipe1(TestQFinPipe):
+    add_num = 1
+
+
+class TestQFinPipe2(TestQFinPipe):
+    add_num = 2
+
+
+class TestQFinPipe3(TestQFinPipe):
+    add_num = 3
+
+
+class TestQFinPipe4(TestQFinPipe):
+    add_num = 4
+
+
+class TestQFinPipe5(TestQFinPipe):
+    add_num = 5
 
 
 def main():

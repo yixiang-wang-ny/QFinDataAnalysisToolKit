@@ -11,10 +11,14 @@ class QFinPipe(ABC):
         self.down_stream_pipelines: [QFinPipe] = []
 
     @abstractmethod
-    def train(self, features: [FeatureTemplate]):
+    def train(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
         pass
 
-    def append(self, downstream_q_fin_pipes):  # [QFinPipeTemplate] or QFinPipeTemplate) -> QFinPipeTemplate:
+    @abstractmethod
+    def apply(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+        pass
+
+    def append(self, downstream_q_fin_pipes):
 
         downstream_q_fin_pipes: [QFinPipe] or QFinPipe
 
@@ -64,56 +68,6 @@ class QFinPipeLine(object):
                 item_res.extend(pipe.train_pipe(features))
 
             features = item_res
-
-        return features
-
-
-class TestQFinPipe1(QFinPipe):
-
-    def train(self, features: [FeatureTemplate]):
-
-        for x in features:
-            x.data = []
-
-        return features
-
-
-class TestQFinPipe2(QFinPipe):
-
-    def train(self, features: [FeatureTemplate]):
-
-        for x in features:
-            x.data.append(2)
-
-        return features
-
-
-class TestQFinPipe3(QFinPipe):
-
-    def train(self, features: [FeatureTemplate]):
-
-        for x in features:
-            x.data.append(3)
-
-        return features
-
-
-class TestQFinPipe4(QFinPipe):
-
-    def train(self, features: [FeatureTemplate]):
-
-        for x in features:
-            x.data.append(4)
-
-        return features
-
-
-class TestQFinPipe5(QFinPipe):
-
-    def train(self, features: [FeatureTemplate]):
-
-        for x in features:
-            x.data.append(5)
 
         return features
 
