@@ -36,3 +36,11 @@ class ExpectationDeviationScaler(QFinPipe):
 
         return features
 
+
+class MeanDeviationScaler(ExpectationDeviationScaler):
+
+    def stats(self, feature: FeatureTemplate) -> FeatureStats:
+
+        return FeatureStats(expectation=feature.data.mean(), deviation=feature.data.std())
+
+

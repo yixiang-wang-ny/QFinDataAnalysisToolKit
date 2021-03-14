@@ -1,45 +1,8 @@
 from session import QFinDASession
-from pipeline import QFinPipeLine, QFinPipe, PipeSelect
+from pipeline import QFinPipeLine, PipeSelect
 from transformation.missing_value_handler import FillWithMean
+from transformation.scaler import MeanDeviationScaler
 import pandas as pd
-
-
-class TestQFinPipe(QFinPipe):
-
-    add_num = None
-
-    def apply(self, features):
-        return
-
-    def train(self, features):
-
-        for x in features:
-            if not isinstance(x.data, list):
-                x.data = []
-            else:
-                x.data.append(self.add_num)
-
-        return features
-
-
-class TestQFinPipe1(TestQFinPipe):
-    add_num = 1
-
-
-class TestQFinPipe2(TestQFinPipe):
-    add_num = 2
-
-
-class TestQFinPipe3(TestQFinPipe):
-    add_num = 3
-
-
-class TestQFinPipe4(TestQFinPipe):
-    add_num = 4
-
-
-class TestQFinPipe5(TestQFinPipe):
-    add_num = 5
 
 
 def main():
@@ -54,12 +17,15 @@ def main():
 
     pipe_line = QFinPipeLine()
 
-    missing_value_pipe = FillWithMean()
-
-    pipe_line.add(PipeSelect(input_features=["feature_1", "feature_2", "feature_3", "feature_4", "feature_129"]))
-    pipe_line.add(missing_value_pipe)
-
     features = session.data.get_all_features()
+    factor_feature_names = ['feature_0']
+    float_value_feature_names = ['feature_{}'.format(x) for x in range(1, len(features))]
+    missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
+    scale_pipe_line = MeanDeviationScaler(input_features=float_value_feature_names)
+
+    pipe_line.add([PipeSelect(input_features=factor_feature_names), missing_value_pipe])
+    pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe_line])
+
     feature_out = pipe_line.train(features)
 
     return
