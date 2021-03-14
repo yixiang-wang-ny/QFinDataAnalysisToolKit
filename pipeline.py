@@ -26,7 +26,7 @@ class QFinPipeTemplate(ABC):
 
         down_stream_res = []
         for down_stream_pipe in self.down_stream_pipelines:
-            down_stream_res.extend(down_stream_pipe.train(features))
+            down_stream_res.extend(down_stream_pipe.train_pip(features))
 
         return down_stream_res
 
