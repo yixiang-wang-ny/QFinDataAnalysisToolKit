@@ -2,7 +2,24 @@ from session import QFinDASession
 from pipeline import QFinPipeLine, PipeSelect
 from transformation.missing_value_handler import FillWithMean
 from transformation.scaler import MeanDeviationScaler
+from transformation.singular_value_decomposer import PCA
 import pandas as pd
+
+
+FEATURE_SPEC_SET = (
+    (1, 2),
+    (3, 6),
+    (7, 8),
+    (9, 16),
+    (17, 40),
+    (41, 53),
+    (54, 54),
+    (55, 59),
+    (60, 68),
+    (69, 71),
+    (72, 119),
+    (120, 129)
+)
 
 
 def main():
@@ -23,8 +40,11 @@ def main():
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
     scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
 
+    pca_pipe = [PCA(input_features=['feature_{}'.format(x) for x in range(s, e+1)]) for s, e in FEATURE_SPEC_SET]
+
     pipe_line.add([PipeSelect(input_features=factor_feature_names), missing_value_pipe])
     pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe])
+    pipe_line.add([PipeSelect(input_features=factor_feature_names)]+pca_pipe)
 
     feature_out = pipe_line.train(features)
 
