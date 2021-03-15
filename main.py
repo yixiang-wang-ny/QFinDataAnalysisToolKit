@@ -37,9 +37,9 @@ def main():
     features = session.data.get_all_features()
     factor_feature_names = ['feature_0']
     float_value_feature_names = ['feature_{}'.format(x) for x in range(1, len(features))]
+    
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
     scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
-
     pca_pipe = [PCA(input_features=['feature_{}'.format(x) for x in range(s, e+1)]) for s, e in FEATURE_SPEC_SET]
 
     pipe_line.add([PipeSelect(input_features=factor_feature_names), missing_value_pipe])
