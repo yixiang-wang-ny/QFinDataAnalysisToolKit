@@ -1,6 +1,6 @@
 from pipeline import QFinPipe
 from typing import List
-from data.feature import FeatureTemplate
+from data.fields import FeatureTemplate
 from abc import abstractmethod
 from collections import namedtuple
 

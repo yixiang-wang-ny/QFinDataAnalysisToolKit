@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from data.feature import FeatureTemplate
+from data.fields import FeatureTemplate
 
 
 class QFinPipe(ABC):

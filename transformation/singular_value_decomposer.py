@@ -1,6 +1,6 @@
 from pipeline import QFinPipe
 from typing import List
-from data.feature import FeatureTemplate, FeatureSeries
+from data.fields import FeatureTemplate, FeatureSeries
 import pandas as pd
 import sklearn.decomposition as decomposition
 
