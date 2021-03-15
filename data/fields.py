@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from pandas.api.types import is_numeric_dtype
 import numpy as np
 import pandas as pd
-import datetime as dt
 
 
 class Field(object):
@@ -20,13 +19,12 @@ class Field(object):
         return self.name
 
     def __init__(self):
-        pass
-        # raise Exception("Please use one of the factory method")
+        raise RuntimeError("Please use one of the factory method")
 
     @classmethod
     def from_data_frame(cls, name, underlying_data_frame: pd.DataFrame):
 
-        obj = Field()
+        obj = cls.__new__(cls)
 
         obj.name = name
         obj.data = underlying_data_frame[name].reset_index(drop=True)
