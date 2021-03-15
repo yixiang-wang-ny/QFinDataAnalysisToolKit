@@ -30,14 +30,14 @@ def main():
     session = QFinDASession()
     session.add_data_from_data_frame(df, exclude_fields=['resp_1', 'resp_2', 'resp_3', 'resp_4', 'ts_id', 'weight'])
     session.data.set_time_series_id('date')
-    session.data.set_target_columns('resp')
+    session.data.set_target_fields('resp')
 
     pipe_line = QFinPipeLine()
 
     features = session.data.get_all_features()
     factor_feature_names = ['feature_0']
     float_value_feature_names = ['feature_{}'.format(x) for x in range(1, len(features))]
-    
+
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
     scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
     pca_pipe = [PCA(input_features=['feature_{}'.format(x) for x in range(s, e+1)]) for s, e in FEATURE_SPEC_SET]
