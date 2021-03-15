@@ -38,4 +38,9 @@ class RollingWindowGenerator(ValidationGenerator):
             train_ids = distinct_ts_df.iloc[train_start: (train_end+1)].join(ts_df_idx_map)
             test_ts = distinct_ts_df.iloc[test_start: (test_end+1)].join(ts_df_idx_map)
 
-            yield i
+            yield feature_df.iloc[train_ids['index'].min(): (train_ids['index'].max() + 1)], \
+                target_df.iloc[train_ids['index'].min(): (train_ids['index'].max() + 1)], \
+                feature_df.iloc[test_ts['index'].min(): (test_ts['index'].max() + 1)], \
+                target_df.iloc[test_ts['index'].min(): (test_ts['index'].max() + 1)], \
+
+
