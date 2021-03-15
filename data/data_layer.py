@@ -1,6 +1,6 @@
 import datetime as dt
 import pandas as pd
-from data.feature import FeatureSeries
+from data.fields import FeatureSeries
 from collections import OrderedDict
 import data.generator as generator
 
