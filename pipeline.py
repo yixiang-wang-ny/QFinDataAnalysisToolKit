@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from data.fields import FeatureTemplate
+from data.fields import Field
 
 
 class QFinPipe(ABC):
@@ -11,11 +11,11 @@ class QFinPipe(ABC):
         self.down_stream_pipelines: [QFinPipe] = []
 
     @abstractmethod
-    def train(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+    def train(self, features: [Field]) -> [Field]:
         pass
 
     @abstractmethod
-    def apply(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+    def apply(self, features: [Field]) -> [Field]:
         pass
 
     def append(self, downstream_q_fin_pipes):
@@ -29,7 +29,7 @@ class QFinPipe(ABC):
 
         return self
 
-    def train_pipe(self, features: [FeatureTemplate]):
+    def train_pipe(self, features: [Field]):
 
         if self.input_features is None:
             features = self.train(features)
@@ -48,10 +48,10 @@ class QFinPipe(ABC):
 
 class PipeSelect(QFinPipe):
 
-    def train(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+    def train(self, features: [Field]) -> [Field]:
         return features
 
-    def apply(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+    def apply(self, features: [Field]) -> [Field]:
         return features
 
 
@@ -68,7 +68,7 @@ class QFinPipeLine(object):
         else:
             self.pipe_items.append([pipe_layer])
 
-    def train(self, features: [FeatureTemplate]) -> [FeatureTemplate]:
+    def train(self, features: [Field]) -> [Field]:
 
         for item in self.pipe_items:
 

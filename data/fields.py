@@ -2,11 +2,16 @@ from abc import ABC, abstractmethod
 from pandas.api.types import is_numeric_dtype
 import numpy as np
 import pandas as pd
+import datetime as dt
 
 
-class FeatureTemplate(ABC):
+class Field(object):
 
     name = None
+    data: pd.Series = None
+    _has_missing = None
+    _is_numeric = None
+    _is_factor = None
 
     def __str__(self):
         return self.name
@@ -15,36 +20,21 @@ class FeatureTemplate(ABC):
         return self.name
 
     def __init__(self):
-        self.data: pd.Series = pd.Series()
+        pass
+        # raise Exception("Please use one of the factory method")
 
-    @abstractmethod
-    def get_data(self) -> np.array:
-        return
+    @classmethod
+    def from_data_frame(cls, name, underlying_data_frame: pd.DataFrame):
 
-    @abstractmethod
-    def is_numeric(self):
-        return
+        obj = Field()
 
-    @abstractmethod
-    def is_factor(self):
-        return
+        obj.name = name
+        obj.data = underlying_data_frame[name].reset_index(drop=True)
+        obj._has_missing = obj.data.isnull().any()
+        obj._is_numeric = is_numeric_dtype(obj.data)
+        obj._is_factor = not obj._is_numeric
 
-    @abstractmethod
-    def has_missing_value(self):
-        return
-
-
-class FeatureSeries(FeatureTemplate):
-
-    def __init__(self, name: str, underlying_data_frame: pd.DataFrame):
-
-        super(FeatureSeries, self).__init__()
-
-        self.name = name
-        self.data = underlying_data_frame[name].reset_index(drop=True)
-        self._has_missing = self.data.isnull().any()
-        self._is_numeric = is_numeric_dtype(self.data)
-        self._is_factor = not self._is_numeric
+        return obj
 
     def get_data(self) -> np.array:
         return self.data.values

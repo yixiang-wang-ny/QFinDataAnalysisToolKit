@@ -1,6 +1,6 @@
 from pipeline import QFinPipe
 from typing import List
-from data.fields import FeatureTemplate
+from data.fields import Field
 from abc import abstractmethod
 
 
@@ -13,17 +13,17 @@ class MissingValueHandler(QFinPipe):
         super(MissingValueHandler, self).__init__(*args, **kwargs)
 
     @abstractmethod
-    def unconditional_expectation_measure(self, feature: FeatureTemplate):
+    def unconditional_expectation_measure(self, feature: Field):
         pass
 
-    def train(self, features: List[FeatureTemplate]):
+    def train(self, features: List[Field]):
 
         for feature in features:
             self.parameters_map[feature.name] = self.unconditional_expectation_measure(feature)
 
         return self.apply(features)
 
-    def apply(self, features: List[FeatureTemplate]):
+    def apply(self, features: List[Field]):
 
         for feature in features:
             feature.data = feature.data.fillna(self.parameters_map[feature.name])
@@ -33,12 +33,12 @@ class MissingValueHandler(QFinPipe):
 
 class FillWithMedian(MissingValueHandler):
 
-    def unconditional_expectation_measure(self, feature: FeatureTemplate):
+    def unconditional_expectation_measure(self, feature: Field):
         return feature.data.median()
 
 
 class FillWithMean(MissingValueHandler):
 
-    def unconditional_expectation_measure(self, feature: FeatureTemplate):
+    def unconditional_expectation_measure(self, feature: Field):
         return feature.data.mean()
 

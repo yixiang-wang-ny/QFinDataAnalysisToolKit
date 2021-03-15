@@ -1,6 +1,6 @@
 from pipeline import QFinPipe
 from typing import List
-from data.fields import FeatureTemplate
+from data.fields import Field
 from abc import abstractmethod
 from collections import namedtuple
 
@@ -16,17 +16,17 @@ class ExpectationDeviationScaler(QFinPipe):
         super(ExpectationDeviationScaler, self).__init__(*args, **kwargs)
 
     @abstractmethod
-    def stats(self, feature: FeatureTemplate) -> FeatureStats:
+    def stats(self, feature: Field) -> FeatureStats:
         pass
 
-    def train(self, features: List[FeatureTemplate]):
+    def train(self, features: List[Field]):
 
         for feature in features:
             self.parameters_map[feature.name] = self.stats(feature)
 
         return self.apply(features)
 
-    def apply(self, features: List[FeatureTemplate]):
+    def apply(self, features: List[Field]):
 
         for feature in features:
 
@@ -39,7 +39,7 @@ class ExpectationDeviationScaler(QFinPipe):
 
 class MeanDeviationScaler(ExpectationDeviationScaler):
 
-    def stats(self, feature: FeatureTemplate) -> FeatureStats:
+    def stats(self, feature: Field) -> FeatureStats:
 
         return FeatureStats(expectation=feature.data.mean(), deviation=feature.data.std())
 

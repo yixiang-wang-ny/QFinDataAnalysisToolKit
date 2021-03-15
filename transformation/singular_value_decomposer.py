@@ -1,6 +1,6 @@
 from pipeline import QFinPipe
 from typing import List
-from data.fields import FeatureTemplate, FeatureSeries
+from data.fields import Field
 import pandas as pd
 import sklearn.decomposition as decomposition
 
@@ -18,7 +18,7 @@ class PCA(QFinPipe):
 
         super(PCA, self).__init__(*args, **kwargs)
 
-    def train(self, features: List[FeatureTemplate]):
+    def train(self, features: List[Field]):
 
         # todo: I am aiming to make it work at this moment, but should be made more efficient
 
@@ -27,13 +27,13 @@ class PCA(QFinPipe):
 
         return self.apply(features)
 
-    def apply(self, features: List[FeatureTemplate]):
+    def apply(self, features: List[Field]):
 
         # todo: same here, need to be optimized in terms of both memory and performance
         out_pcs = self.pca_obj.transform(pd.concat([feature.data for feature in features], axis=1).values)
         out_df = pd.DataFrame(out_pcs, columns=[self.component_prefix + str(i) for i in range(out_pcs.shape[1])])
 
-        return [FeatureSeries(col, out_df) for col in out_df]
+        return [Field.from_data_frame(col, out_df) for col in out_df]
 
 
 
