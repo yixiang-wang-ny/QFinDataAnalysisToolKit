@@ -88,4 +88,4 @@ class Data(object):
             self.get_all_features()
         )
 
-        yield gen_obj.gen(train_window_size=train_window_size, test_window_size=test_window_size, step=step)
+        return gen_obj.gen(train_window_size=train_window_size, test_window_size=test_window_size, step=step)

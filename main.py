@@ -48,6 +48,11 @@ def main():
 
     feature_out = pipe_line.train(features)
 
+    rolling_window_generator = session.data.get_rolling_window_generator()
+
+    for data in rolling_window_generator:
+        print(data)
+
     return
 
 
