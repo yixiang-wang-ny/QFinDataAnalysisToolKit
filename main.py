@@ -50,8 +50,8 @@ def main():
 
     rolling_window_generator = session.data.get_rolling_window_generator()
 
-    for data in rolling_window_generator:
-        print(data)
+    for train_in, train_out, test_in, test_out in rolling_window_generator:
+        print("get some data")
 
     return
 
