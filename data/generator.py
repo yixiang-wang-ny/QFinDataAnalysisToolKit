@@ -25,6 +25,9 @@ class RollingWindowGenerator(ValidationGenerator):
         distinct_ts_df = ts_df.drop_duplicates().set_index(ts_columns)
         num_ts = len(distinct_ts_df)
 
+        feature_df = pd.concat([s.data for s in self.features], axis=1).reset_index(drop=True)
+        target_df = pd.concat([s.data for s in self.target_columns], axis=1).reset_index(drop=True)
+
         for i in range(0, num_ts-train_window_size-test_window_size, step):
 
             train_start = i
@@ -32,7 +35,7 @@ class RollingWindowGenerator(ValidationGenerator):
             test_start = train_end + 1
             test_end = test_start + test_window_size - 1
 
-            train_ids = distinct_ts_df.iloc[train_start: train_end].join(ts_df_idx_map)
-            test_ts = distinct_ts_df.iloc[test_start: test_end].join(ts_df_idx_map)
+            train_ids = distinct_ts_df.iloc[train_start: (train_end+1)].join(ts_df_idx_map)
+            test_ts = distinct_ts_df.iloc[test_start: (test_end+1)].join(ts_df_idx_map)
 
             yield i
