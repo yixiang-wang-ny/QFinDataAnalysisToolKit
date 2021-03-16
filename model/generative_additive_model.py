@@ -17,13 +17,12 @@ class GAM(Predictor):
         self.num_splines = num_splines
         self.model = None
 
-    @classmethod
-    def get_gam_model(cls, features: [Field], model_type=TYPE_LINEAR):
+    def get_gam_model(self, features: [Field], model_type=TYPE_LINEAR):
 
-        model_spec = f(0) if features[0].is_factor() else s(0)
+        model_spec = f(0) if features[0].is_factor() else s(0, n_splines=self.num_splines)
 
         for i in range(1, len(features)):
-            model_spec = model_spec + f(0) if features[i].is_factor() else s(0)
+            model_spec = model_type + (f(i) if features[i].is_factor() else s(0, n_splines=self.num_splines))
 
         if model_type == TYPE_LINEAR:
             return LinearGAM(model_spec)
