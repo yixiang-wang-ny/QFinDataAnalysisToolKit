@@ -1,8 +1,14 @@
-from abc import ABC
+from abc import ABC, abstractmethod
+from data.field import Field
 
 
 class Predictor(ABC):
 
-    pass
+    @abstractmethod
+    def train(self, features: [Field], responses: [Field], **kwargs):
+        pass
 
+    @abstractmethod
+    def predict(self, features: [Field]):
+        pass
 
