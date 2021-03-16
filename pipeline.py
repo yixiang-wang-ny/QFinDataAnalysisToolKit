@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterable
-from data.fields import Field
+from data.field import Field
 
 
 class QFinPipe(ABC):

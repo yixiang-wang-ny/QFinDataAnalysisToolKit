@@ -1,6 +1,6 @@
 import datetime as dt
 import pandas as pd
-from data.fields import Field
+from data.field import Field
 from collections import OrderedDict
 import data.generator as generator
 

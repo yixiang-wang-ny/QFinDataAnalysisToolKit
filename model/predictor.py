@@ -1,6 +1,8 @@
-from model.template import ModelTemplate
+from abc import ABC
 
 
-class Predictor(ModelTemplate):
+class Predictor(ABC):
 
     pass
+
+

@@ -1,6 +1,6 @@
 from pipeline import QFinPipe
 from typing import List
-from data.fields import Field
+from data.field import Field
 from abc import abstractmethod
 
 
