@@ -36,8 +36,8 @@ def main():
     pipe_line = QFinPipeLine()
 
     features = session.data.get_all_features()
-    factor_feature_names = [x for x in features if x.is_factor()]
-    float_value_feature_names = [x for x in features if not x.is_factor()]
+    factor_feature_names = [x.name for x in features if x.is_factor()]
+    float_value_feature_names = [x.name for x in features if not x.is_factor()]
 
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
     scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
