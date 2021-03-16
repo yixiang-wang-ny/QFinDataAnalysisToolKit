@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from pandas.api.types import is_numeric_dtype
 import numpy as np
 import pandas as pd
@@ -45,3 +44,16 @@ class Field(object):
 
     def has_missing_value(self):
         return self._has_missing
+
+    def slice(self, start, end):
+
+        obj = self.__new__(Field)
+
+        obj.name = self.name
+        obj.data = self.data.iloc[start: end]
+        obj._has_missing = self._has_missing
+        obj._is_numeric = self._is_numeric
+        obj._is_factor = self._is_factor
+
+        return obj
+

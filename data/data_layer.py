@@ -15,18 +15,22 @@ class Data(object):
         self.securities_id_columns = []
         self.ts_id_columns = []
         self.target_columns = []
-        self.feature_map = OrderedDict()
+        self.field_map = OrderedDict()
 
-    def add_from_data_frame(self, df, exclude_fields):
+    def add_from_data_frame(self, df, exclude_fields, factor_fields=()):
+
+        factor_fields = set(factor_fields)
 
         for col in df:
 
             if col in exclude_fields:
                 continue
 
-            feature = Field.from_data_frame(col, df)
+            field = Field.from_data_frame(col, df)
+            if field.name in factor_fields:
+                field._is_factor = True
 
-            self.feature_map[feature.name] = feature
+            self.field_map[field.name] = field
 
     def set_time_series_id(self, ts_id_names):
 
@@ -51,33 +55,33 @@ class Data(object):
 
     def get_data_array(self, field):
 
-        return self.feature_map[field].get_data()
+        return self.field_map[field].get_data()
 
     def get_data_frame(self, field):
 
-        return pd.DataFrame({field: self.feature_map[field].get_data()})
+        return pd.DataFrame({field: self.field_map[field].get_data()})
 
     def get_all_features(self):
         return [
-            v for k, v in self.feature_map.items()
+            v for k, v in self.field_map.items()
             if k not in self.securities_id_columns and k not in self.ts_id_columns and k not in self.target_columns
         ]
 
     def get_ts_ids(self):
 
-        return [v for k, v in self.feature_map.items() if k in self.ts_id_columns]
+        return [v for k, v in self.field_map.items() if k in self.ts_id_columns]
 
     def get_securities_ids(self):
 
-        return [v for k, v in self.feature_map.items() if k in self.securities_id_columns]
+        return [v for k, v in self.field_map.items() if k in self.securities_id_columns]
 
     def get_target_fields(self):
 
-        return [v for k, v in self.feature_map.items() if k in self.target_columns]
+        return [v for k, v in self.field_map.items() if k in self.target_columns]
 
     def get_field_names(self):
 
-        return self.feature_map.keys()
+        return self.field_map.keys()
 
     def get_rolling_window_generator(self, train_window_size=40, test_window_size=5, step=1):
 

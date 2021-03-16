@@ -1,5 +1,16 @@
 from abc import ABC
 import pandas as pd
+from data.field import Field
+
+
+class DataContainer(object):
+
+    def __init__(self, train_in: [Field], train_out: [Field], test_in: [Field], test_out: [Field]):
+
+        self.train_in: [Field] = train_in
+        self.train_out: [Field] = train_out
+        self.test_in: [Field] = test_in
+        self.test_out: [Field] = test_out
 
 
 class ValidationGenerator(ABC):
@@ -9,7 +20,7 @@ class ValidationGenerator(ABC):
 
 class RollingWindowGenerator(ValidationGenerator):
 
-    def __init__(self, ts_ids, securities_ids, target_columns, features):
+    def __init__(self, ts_ids: [Field], securities_ids: [Field], target_columns: [Field], features: [Field]):
 
         self.ts_ids = ts_ids
         self.securities_ids = securities_ids
@@ -25,9 +36,6 @@ class RollingWindowGenerator(ValidationGenerator):
         distinct_ts_df = ts_df.drop_duplicates().set_index(ts_columns)
         num_ts = len(distinct_ts_df)
 
-        feature_df = pd.concat([s.data for s in self.features], axis=1).reset_index(drop=True)
-        target_df = pd.concat([s.data for s in self.target_columns], axis=1).reset_index(drop=True)
-
         for i in range(0, num_ts-train_window_size-test_window_size, step):
 
             train_start = i
@@ -38,9 +46,16 @@ class RollingWindowGenerator(ValidationGenerator):
             train_ids = distinct_ts_df.iloc[train_start: (train_end+1)].join(ts_df_idx_map)
             test_ts = distinct_ts_df.iloc[test_start: (test_end+1)].join(ts_df_idx_map)
 
-            yield feature_df.iloc[train_ids['index'].min(): (train_ids['index'].max() + 1)], \
-                target_df.iloc[train_ids['index'].min(): (train_ids['index'].max() + 1)], \
-                feature_df.iloc[test_ts['index'].min(): (test_ts['index'].max() + 1)], \
-                target_df.iloc[test_ts['index'].min(): (test_ts['index'].max() + 1)], \
+            train_start_idx = train_ids['index'].min()
+            train_end_idx = train_ids['index'].max()
+            test_start_dix = test_ts['index'].min()
+            test_end_idx = test_ts['index'].max()
+
+            yield DataContainer(
+                [f.slice(train_start_idx, train_end_idx+1) for f in self.features],
+                [f.slice(train_start_idx, train_end_idx+1) for f in self.target_columns],
+                [f.slice(test_start_dix, test_end_idx+1) for f in self.features],
+                [f.slice(test_start_dix, test_end_idx+1) for f in self.target_columns],
+            )
 
 

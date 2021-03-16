@@ -28,7 +28,8 @@ def main():
     df = pd.read_csv(data_path)
 
     session = QFinDASession()
-    session.add_data_from_data_frame(df, exclude_fields=['resp_1', 'resp_2', 'resp_3', 'resp_4', 'ts_id', 'weight'])
+    session.add_data_from_data_frame(df, exclude_fields=['resp_1', 'resp_2', 'resp_3', 'resp_4', 'ts_id', 'weight'],
+                                     factor_fields=('feature_0', ))
     session.data.set_time_series_id('date')
     session.data.set_target_fields('resp')
 
@@ -50,7 +51,7 @@ def main():
 
     rolling_window_generator = session.data.get_rolling_window_generator()
 
-    for train_in, train_out, test_in, test_out in rolling_window_generator:
+    for data in rolling_window_generator:
         print("get some data")
 
     return
