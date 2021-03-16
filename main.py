@@ -25,20 +25,21 @@ FEATURE_SPEC_SET = (
 
 def main():
 
-    data_path = r'C:\Users\yixia\OneDrive\Files\Kaggle\jane-street-market-prediction\train.csv'
-    df = pd.read_csv(data_path)
-
     session = QFinDASession()
-    session.add_data_from_data_frame(df, exclude_fields=['resp_1', 'resp_2', 'resp_3', 'resp_4', 'ts_id', 'weight'],
-                                     factor_fields=('feature_0', ))
+    session.add_data_from_csv(
+        r'C:\Users\yixia\OneDrive\Files\Kaggle\jane-street-market-prediction\train.csv',
+        exclude_fields=['resp_1', 'resp_2', 'resp_3', 'resp_4', 'ts_id', 'weight'],
+        factor_fields=('feature_0', )
+    )
     session.data.set_time_series_id('date')
     session.data.set_target_fields('resp')
-
-    pipe_line = QFinPipeLine()
 
     features = session.data.get_all_features()
     factor_feature_names = [x.name for x in features if x.is_factor()]
     float_value_feature_names = [x.name for x in features if not x.is_factor()]
+
+    # set up pipe line
+    pipe_line = QFinPipeLine()
 
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
     scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
@@ -48,15 +49,16 @@ def main():
     pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe])
     pipe_line.add([PipeSelect(input_features=factor_feature_names)]+pca_pipe)
 
+    # run pipe line
     session.set_feature_transformer(pipe_line)
     session.run_feature_transformer()
 
+    # get data generator
     rolling_window_generator = session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5,
                                                                          step=20)
 
     for data in rolling_window_generator:
-
-        gam = GAM()
+        gam = GAM(lam=25000)
         gam.train(data.train_in, data.train_out)
         gam.predict(data.test_in)
 

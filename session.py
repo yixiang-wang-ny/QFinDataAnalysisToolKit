@@ -10,6 +10,11 @@ class QFinDASession(object):
         self.data_layer = None
         self.feature_transformer = None
 
+    def add_data_from_csv(self, file_path, exclude_fields=(), factor_fields=()):
+
+        df = pd.read_csv(file_path)
+        self.add_data_from_data_frame(df, exclude_fields, factor_fields)
+
     def add_data_from_data_frame(self, df, exclude_fields=(), factor_fields=()):
 
         data_object = Data()
