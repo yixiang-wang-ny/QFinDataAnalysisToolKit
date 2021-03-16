@@ -61,21 +61,21 @@ class Data(object):
 
         return pd.DataFrame({field: self.field_map[field].get_data()})
 
-    def get_all_features(self):
+    def get_all_features(self) -> [Field]:
         return [
             v for k, v in self.field_map.items()
             if k not in self.securities_id_columns and k not in self.ts_id_columns and k not in self.target_columns
         ]
 
-    def get_ts_ids(self):
+    def get_ts_ids(self) -> [Field]:
 
         return [v for k, v in self.field_map.items() if k in self.ts_id_columns]
 
-    def get_securities_ids(self):
+    def get_securities_ids(self) -> [Field]:
 
         return [v for k, v in self.field_map.items() if k in self.securities_id_columns]
 
-    def get_target_fields(self):
+    def get_target_fields(self) -> [Field]:
 
         return [v for k, v in self.field_map.items() if k in self.target_columns]
 

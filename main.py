@@ -36,8 +36,8 @@ def main():
     pipe_line = QFinPipeLine()
 
     features = session.data.get_all_features()
-    factor_feature_names = ['feature_0']
-    float_value_feature_names = ['feature_{}'.format(x) for x in range(1, len(features))]
+    factor_feature_names = [x for x in features if x.is_factor()]
+    float_value_feature_names = [x for x in features if not x.is_factor()]
 
     missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
     scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
@@ -47,7 +47,8 @@ def main():
     pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe])
     pipe_line.add([PipeSelect(input_features=factor_feature_names)]+pca_pipe)
 
-    feature_out = pipe_line.train(features)
+    session.set_feature_transformer(pipe_line)
+    session.run_feature_transformer()
 
     rolling_window_generator = session.data.get_rolling_window_generator()
 
