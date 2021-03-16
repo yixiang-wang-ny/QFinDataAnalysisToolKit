@@ -5,12 +5,19 @@ from data.field import Field
 
 class DataContainer(object):
 
-    def __init__(self, train_in: [Field], train_out: [Field], test_in: [Field], test_out: [Field]):
+    def __init__(
+            self, train_in: [Field], train_out: [Field], test_in: [Field], test_out: [Field], train_ts: [Field] or None,
+            test_ts: [Field] or None, train_securities: [Field] or None, test_securities: [Field] or None
+    ):
 
         self.train_in: [Field] = train_in
         self.train_out: [Field] = train_out
         self.test_in: [Field] = test_in
         self.test_out: [Field] = test_out
+        self.train_ts: [Field] or None = train_ts
+        self.test_ts: [Field] or None = test_ts
+        self.train_securities: [Field] or None = train_securities
+        self.test_securities: [Field] or None = test_securities
 
 
 class ValidationGenerator(ABC):
@@ -56,6 +63,10 @@ class RollingWindowGenerator(ValidationGenerator):
                 [f.slice(train_start_idx, train_end_idx+1) for f in self.target_columns],
                 [f.slice(test_start_dix, test_end_idx+1) for f in self.features],
                 [f.slice(test_start_dix, test_end_idx+1) for f in self.target_columns],
+                [f.slice(train_start_idx, train_end_idx+1) for f in self.ts_ids],
+                [f.slice(test_start_dix, test_start_dix+1) for f in self.ts_ids],
+                [f.slice(train_start_idx, train_end_idx + 1) for f in self.securities_ids],
+                [f.slice(test_start_dix, test_start_dix + 1) for f in self.securities_ids]
             )
 
 
