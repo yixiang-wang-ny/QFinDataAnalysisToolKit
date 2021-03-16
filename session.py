@@ -1,6 +1,9 @@
 import pandas as pd
 from data.data_layer import Data
 from pipeline import QFinPipeLine
+from model.predictor import Predictor
+from model.criteria import PerformanceMeasure
+from data.generator import ValidationGenerator
 
 
 class QFinDASession(object):
@@ -9,6 +12,9 @@ class QFinDASession(object):
 
         self.data_layer = None
         self.feature_transformer = None
+        self.models = []
+        self.performance_measures = []
+        self.validation_data_generator = None
 
     def add_data_from_csv(self, file_path, exclude_fields=(), factor_fields=()):
 
@@ -40,3 +46,11 @@ class QFinDASession(object):
         for f in out_features:
             self.data.field_map[f.name] = f
 
+    def add_model(self, model: Predictor):
+        self.models.append(model)
+
+    def add_model_performance_measure(self, measure: PerformanceMeasure):
+        self.performance_measures.append(measure)
+
+    def set_data_validation_generator(self, generator: ValidationGenerator):
+        self.validation_data_generator = generator

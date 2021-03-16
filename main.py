@@ -4,7 +4,6 @@ from transformation.missing_value_handler import FillWithMean
 from transformation.scaler import MeanDeviationScaler
 from transformation.singular_value_decomposer import PCA
 from model.generative_additive_model import GAM
-import pandas as pd
 
 
 FEATURE_SPEC_SET = (
@@ -49,18 +48,16 @@ def main():
     pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe])
     pipe_line.add([PipeSelect(input_features=factor_feature_names)]+pca_pipe)
 
-    # run pipe line
     session.set_feature_transformer(pipe_line)
-    session.run_feature_transformer()
 
     # get data generator
-    rolling_window_generator = session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5,
-                                                                         step=20)
+    rolling_window_generator = session.data.get_rolling_window_generator(
+        train_window_size=20, test_window_size=5, step=20
+    )
+    session.set_data_validation_generator(rolling_window_generator)
 
-    for data in rolling_window_generator:
-        gam = GAM(lam=25000)
-        gam.train(data.train_in, data.train_out)
-        gam.predict(data.test_in)
+    # add models
+    session.add_model(GAM(lam=25000))
 
     return
 
