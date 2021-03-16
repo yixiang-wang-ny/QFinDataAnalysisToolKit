@@ -59,7 +59,6 @@ def main():
         gam = GAM()
         gam.train(data.train_in, data.train_out)
         gam.predict(data.test_in)
-        print("get some data")
 
     return
 
