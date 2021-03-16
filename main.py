@@ -56,8 +56,9 @@ def main():
     )
     session.set_data_validation_generator(rolling_window_generator)
 
-    # add models
+    # add models and search
     session.add_model(GAM(lam=25000))
+    session.kick_off_model_search()
 
     return
 

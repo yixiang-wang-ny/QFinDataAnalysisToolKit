@@ -1,6 +1,7 @@
 from abc import ABC
 import pandas as pd
 from data.field import Field
+from typing import Generator
 
 
 class DataContainer(object):
@@ -34,7 +35,7 @@ class RollingWindowGenerator(ValidationGenerator):
         self.target_columns = target_columns
         self.features = features
 
-    def gen(self, train_window_size=40, test_window_size=5, step=1) -> DataContainer:
+    def gen(self, train_window_size=40, test_window_size=5, step=1) -> Generator[DataContainer, None, None]:
 
         ts_df = pd.concat([s.data for s in self.ts_ids], axis=1).reset_index(drop=True)
         ts_columns = ts_df.columns.tolist()

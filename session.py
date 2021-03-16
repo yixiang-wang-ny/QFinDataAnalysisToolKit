@@ -3,7 +3,8 @@ from data.data_layer import Data
 from pipeline import QFinPipeLine
 from model.predictor import Predictor
 from model.criteria import PerformanceMeasure
-from data.generator import ValidationGenerator
+from data.generator import ValidationGenerator, DataContainer
+from typing import List, Optional, Generator
 
 
 class QFinDASession(object):
@@ -12,9 +13,9 @@ class QFinDASession(object):
 
         self.data_layer = None
         self.feature_transformer = None
-        self.models = []
-        self.performance_measures = []
-        self.validation_data_generator = None
+        self.models: List[Predictor] = []
+        self.performance_measures: List[PerformanceMeasure] = []
+        self.validation_data_generator: Optional[Generator[DataContainer]] = None
 
     def add_data_from_csv(self, file_path, exclude_fields=(), factor_fields=()):
 
@@ -54,3 +55,14 @@ class QFinDASession(object):
 
     def set_data_validation_generator(self, generator: ValidationGenerator):
         self.validation_data_generator = generator
+
+    def kick_off_model_search(self):
+
+        self.run_feature_transformer()
+        for data in self.validation_data_generator:
+            for model in self.models:
+                model.train(data.train_in, data.train_out)
+                print("Score is {}".format(
+                    model.predict(data.test_in), data.test_out[0].data.values())
+                )
+

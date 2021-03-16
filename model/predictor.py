@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from data.field import Field
+import numpy as np
 
 
 class Predictor(ABC):
@@ -9,6 +10,6 @@ class Predictor(ABC):
         pass
 
     @abstractmethod
-    def predict(self, features: [Field]):
+    def predict(self, features: [Field]) -> np.array:
         pass
 
