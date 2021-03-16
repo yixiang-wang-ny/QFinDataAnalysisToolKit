@@ -23,7 +23,7 @@ class GAM(Predictor):
         model_spec = f(0) if features[0].is_factor() else s(0)
 
         for i in range(1, len(features)):
-            model_spec += f(0) if features[i].is_factor() else s(0)
+            model_spec = model_spec + f(0) if features[i].is_factor() else s(0)
 
         if model_type == TYPE_LINEAR:
             return LinearGAM(model_spec)

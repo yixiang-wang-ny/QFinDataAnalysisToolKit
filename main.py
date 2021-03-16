@@ -3,6 +3,7 @@ from pipeline import QFinPipeLine, PipeSelect
 from transformation.missing_value_handler import FillWithMean
 from transformation.scaler import MeanDeviationScaler
 from transformation.singular_value_decomposer import PCA
+from model.generative_additive_model import GAM
 import pandas as pd
 
 
@@ -53,6 +54,10 @@ def main():
     rolling_window_generator = session.data.get_rolling_window_generator()
 
     for data in rolling_window_generator:
+
+        gam = GAM()
+        gam.train(data.train_in, data.train_out)
+        gam.predict(data.test_in)
         print("get some data")
 
     return
