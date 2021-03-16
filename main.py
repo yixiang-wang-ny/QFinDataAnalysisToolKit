@@ -51,7 +51,8 @@ def main():
     session.set_feature_transformer(pipe_line)
     session.run_feature_transformer()
 
-    rolling_window_generator = session.data.get_rolling_window_generator()
+    rolling_window_generator = session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5,
+                                                                         step=20)
 
     for data in rolling_window_generator:
 
