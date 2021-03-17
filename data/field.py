@@ -30,10 +30,14 @@ class Field(object):
         obj.name = name
         obj.data = underlying_data_frame[name].reset_index(drop=True)
 
+        has_missing = obj.data.isnull().any()
+        is_numeric = is_numeric_dtype(obj.data)
+        is_factor = not is_numeric
+
         obj.meta = FieldMeta(
-            obj.data.isnull().any(),
-            is_numeric_dtype(obj.data),
-            not is_numeric_dtype(obj.data)
+            has_missing,
+            is_numeric,
+            is_factor
         )
 
         return obj
