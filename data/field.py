@@ -1,15 +1,17 @@
 from pandas.api.types import is_numeric_dtype
 import numpy as np
 import pandas as pd
+from collections import namedtuple
+from copy import deepcopy
+
+FieldMeta = namedtuple("FieldMeta", ("hasMissing", "isNumeric", "isFactor"))
 
 
 class Field(object):
 
     name = None
     data: pd.Series = None
-    _has_missing = None
-    _is_numeric = None
-    _is_factor = None
+    meta: FieldMeta = None
 
     def __str__(self):
         return self.name
@@ -18,7 +20,7 @@ class Field(object):
         return self.name
 
     def __init__(self):
-        raise RuntimeError("Please use one of the factory method")
+        raise RuntimeError("Please use one of the factory methods")
 
     @classmethod
     def from_data_frame(cls, name, underlying_data_frame: pd.DataFrame):
@@ -27,9 +29,12 @@ class Field(object):
 
         obj.name = name
         obj.data = underlying_data_frame[name].reset_index(drop=True)
-        obj._has_missing = obj.data.isnull().any()
-        obj._is_numeric = is_numeric_dtype(obj.data)
-        obj._is_factor = not obj._is_numeric
+
+        obj.meta = FieldMeta(
+            obj.data.isnull().any(),
+            is_numeric_dtype(obj.data),
+            not is_numeric_dtype(obj.data)
+        )
 
         return obj
 
@@ -37,13 +42,13 @@ class Field(object):
         return self.data.values
 
     def is_numeric(self):
-        return self._is_numeric
+        return self.meta.isNumeric
 
     def is_factor(self):
-        return self._is_factor
+        return self.meta.isFactor
 
     def has_missing_value(self):
-        return self._has_missing
+        return self.meta.hasMissing
 
     def slice(self, start, end):
 
@@ -51,9 +56,7 @@ class Field(object):
 
         obj.name = self.name
         obj.data = self.data.iloc[start: end]
-        obj._has_missing = self._has_missing
-        obj._is_numeric = self._is_numeric
-        obj._is_factor = self._is_factor
+        obj.meta = deepcopy(self.meta)
 
         return obj
 
