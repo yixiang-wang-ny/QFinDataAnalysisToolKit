@@ -62,7 +62,13 @@ class QFinDASession(object):
         for data in self.validation_data_generator:
             for model in self.models:
                 model.train(data.train_in, data.train_out)
-                print("Score is {}".format(
-                    model.predict(data.test_in), data.test_out[0].data.values())
-                )
+                for measure in self.performance_measures:
+                    print("Finished")
+                    print(
+                        "Score is {}".format(
+                            measure.score(
+                                model.predict(data.test_in), pd.concat([x.data for x in data.test_out], axis=1).values
+                            )
+                        )
+                    )
 

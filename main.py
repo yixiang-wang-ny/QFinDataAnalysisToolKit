@@ -4,6 +4,7 @@ from transformation.missing_value_handler import FillWithMean
 from transformation.scaler import MeanDeviationScaler
 from transformation.singular_value_decomposer import PCA
 from model.generative_additive_model import GAM
+from model.criteria import DirectionalAccuracy
 
 
 FEATURE_SPEC_SET = (
@@ -58,6 +59,7 @@ def main():
 
     # add models and search
     session.add_model(GAM(lam=25000))
+    session.add_model_performance_measure(DirectionalAccuracy())
     session.kick_off_model_search()
 
     return
