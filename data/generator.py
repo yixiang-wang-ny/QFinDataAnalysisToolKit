@@ -1,24 +1,25 @@
 from abc import ABC
 import pandas as pd
 from data.field import Field
-from typing import Generator
+from typing import Generator, Optional, List
 
 
 class DataContainer(object):
 
     def __init__(
-            self, train_in: [Field], train_out: [Field], test_in: [Field], test_out: [Field], train_ts: [Field] or None,
-            test_ts: [Field] or None, train_securities: [Field] or None, test_securities: [Field] or None
+            self, train_in: List[Field], train_out: List[Field], test_in: List[Field], test_out: List[Field],
+            train_ts: Optional[List[Field]], test_ts: Optional[List[Field]], train_securities: Optional[List[Field]],
+            test_securities: Optional[List[Field]]
     ):
 
-        self.train_in: [Field] = train_in
-        self.train_out: [Field] = train_out
-        self.test_in: [Field] = test_in
-        self.test_out: [Field] = test_out
-        self.train_ts: [Field] or None = train_ts
-        self.test_ts: [Field] or None = test_ts
-        self.train_securities: [Field] or None = train_securities
-        self.test_securities: [Field] or None = test_securities
+        self.train_in: List[Field] = train_in
+        self.train_out: List[Field] = train_out
+        self.test_in: List[Field] = test_in
+        self.test_out: List[Field] = test_out
+        self.train_ts: Optional[List[Field]] = train_ts
+        self.test_ts: Optional[List[Field]] = test_ts
+        self.train_securities: Optional[List[Field]] = train_securities
+        self.test_securities: Optional[List[Field]] = test_securities
 
 
 class ValidationGenerator(ABC):
