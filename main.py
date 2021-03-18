@@ -5,6 +5,7 @@ from transformation.scaler import MeanDeviationScaler
 from transformation.singular_value_decomposer import PCA
 from model.generative_additive_model import GAM
 from model.criteria import DirectionalAccuracy
+from model.bagging import BaggingByDirectionalVotes
 
 
 FEATURE_SPEC_SET = (
@@ -58,8 +59,8 @@ def main():
     session.set_data_validation_generator(rolling_window_generator)
 
     # add models and search
+    session.add_model(BaggingByDirectionalVotes.wrap(GAM, lam=25000))
     session.add_model(GAM(lam=25000))
-    session.add_model(GAM(lam=20000))
     session.add_model_performance_measure(DirectionalAccuracy())
     session.kick_off_model_search()
 

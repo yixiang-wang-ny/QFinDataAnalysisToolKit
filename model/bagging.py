@@ -12,7 +12,7 @@ class Bagging(Predictor):
     model_cls: ClassVar[Predictor] = None
     model_args = None
     model_kwargs = None
-    model_instance_map: Dict[object: Predictor] = None
+    model_instance_map: Dict[object, Predictor] = None
 
     def __init__(self):
 
