@@ -62,7 +62,7 @@ class BaggingByDirectionalVotes(Bagging):
         returns = np.zeros(length)
         votes = np.zeros(length)
 
-        for _, model in self.model_instance_map:
+        for _, model in models:
             prediction = model.predict(features)
             returns += prediction
             votes += np.array([x > 0 for x in prediction])
