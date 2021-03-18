@@ -78,10 +78,10 @@ class QFinDASession(object):
                 if model_name not in self.model_train_history:
                     self.model_train_history[model_name] = []
 
-                train_ts_range =(data.train_ts[0].data.min(), data.train_ts[0].data.max()) if data.train_ts else None
+                train_ts_range = (data.train_ts[0].data.min(), data.train_ts[0].data.max()) if data.train_ts else None
                 test_ts_range = (data.test_ts[0].data.min(), data.test_ts[0].data.max()) if data.test_ts else None
                 train_securities_range = (data.train_securities[0].data.min(), data.train_securities[0].data.max()) if data.train_securities else None
-                test_securities_range = (data.test_securities[0].data.min(), data.test_ts[0].data.max()) if data.test_securities else None,
+                test_securities_range = (data.test_securities[0].data.min(), data.test_ts[0].data.max()) if data.test_securities else None
                 score_map = {
                     x.get_name(): x.score(
                         model.predict(data.test_in), pd.concat([x.data for x in data.test_out], axis=1).values
