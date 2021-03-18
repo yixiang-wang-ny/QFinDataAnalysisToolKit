@@ -46,7 +46,7 @@ class Bagging(Predictor):
 
     def get_name(self):
 
-        return "ABagOf{}".format(self.model_cls(*self.model_args, **self.model_kwargs).get_name());
+        return "A Bag Of {}".format(self.model_cls(*self.model_args, **self.model_kwargs).get_name());
 
 
 
