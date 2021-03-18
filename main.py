@@ -53,16 +53,18 @@ def main():
 
     # get data generator
     rolling_window_generator = session.data.get_rolling_window_generator(
-        train_window_size=20, test_window_size=5, step=20
+        train_window_size=20, test_window_size=5, step=100
     )
     session.set_data_validation_generator(rolling_window_generator)
 
     # add models and search
     session.add_model(GAM(lam=25000))
+    session.add_model(GAM(lam=20000))
     session.add_model_performance_measure(DirectionalAccuracy())
     session.kick_off_model_search()
 
     summary = session.get_trained_model_summary()
+    print(summary)
 
 
 if __name__ == '__main__':
