@@ -25,7 +25,7 @@ class Bagging(Predictor):
         obj.model_cls = model_class
         obj.model_args = model_args
         obj.model_kwargs = model_kwargs
-        obj.model_instances = []
+        obj.model_instance_map = {}
 
         return obj
 
