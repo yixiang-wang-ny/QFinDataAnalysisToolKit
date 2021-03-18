@@ -62,7 +62,7 @@ def main():
     session.add_model_performance_measure(DirectionalAccuracy())
     session.kick_off_model_search()
 
-    return
+    summary = session.get_trained_model_summary()
 
 
 if __name__ == '__main__':
