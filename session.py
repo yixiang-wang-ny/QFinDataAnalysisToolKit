@@ -26,7 +26,7 @@ class QFinDASession(object):
         self.models: List[Predictor] = []
         self.performance_measures: List[PerformanceMeasure] = []
         self.validation_data_generator: Optional[Generator[DataContainer]] = None
-        self.model_train_history: Dict[str: List[ModelValidationStat]] = {}
+        self.model_train_history: Dict[str: List[ModelValidationStats]] = {}
 
     def add_data_from_csv(self, file_path, exclude_fields=(), factor_fields=()):
 
