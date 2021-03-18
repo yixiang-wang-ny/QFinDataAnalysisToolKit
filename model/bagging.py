@@ -39,7 +39,8 @@ class Bagging(Predictor):
         model_id = kwargs.get('model_id', int(dt.datetime.now().strftime('%Y%m%d%H%M%S')))
 
         model_instance = self.model_cls(*self.model_args, **self.model_kwargs)
-        self.model_instance_map[model_id] = model_instance.train(features, responses, **kwargs)
+        model_instance.train(features, responses, **kwargs)
+        self.model_instance_map[model_id] = model_instance
 
     def predict(self, features: [Field]) -> np.array:
         return self.aggregate(features, list(self.model_instance_map.values()))
