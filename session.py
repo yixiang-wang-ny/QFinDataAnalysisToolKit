@@ -7,7 +7,7 @@ from data.generator import ValidationGenerator, DataContainer
 from typing import List, Optional, Generator
 from collections import namedtuple
 from typing import Dict, List
-from itertools import chain
+import numpy as np
 
 
 ModelValidationStats = namedtuple(
@@ -96,3 +96,13 @@ class QFinDASession(object):
 
                     )
                 )
+
+    def get_trained_model_summary(self):
+
+        return {
+            model: {
+                measure.get_name():
+                    np.mean([record.score_map[measure] for record in records if measure.get_name() in record.score_map])
+                for measure in self.performance_measures
+            } for model, records in self.model_train_history.items()
+        }
