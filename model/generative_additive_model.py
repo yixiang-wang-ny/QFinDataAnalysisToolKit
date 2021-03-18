@@ -17,8 +17,7 @@ class GAM(Predictor):
         self.num_splines = num_splines
         self.model = None
 
-    @property
-    def name(self):
+    def get_name(self):
 
         return "GAM|{}|Splines={}{}".format(
             self.model_type, self.num_splines, "|lam={}".format(self.lam) if self.lam else ""

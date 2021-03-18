@@ -5,11 +5,16 @@ from model.predictor import Predictor
 from model.criteria import PerformanceMeasure
 from data.generator import ValidationGenerator, DataContainer
 from typing import List, Optional, Generator
+from collections import namedtuple
+from typing import Dict, List
+from itertools import chain
 
 
-
-
-
+ModelValidationStats = namedtuple(
+    "ModelValidationStats",
+    ('name', 'train_ts_range', 'test_ts_range', 'train_securities_range', 'test_securities_range', 'trained_model',
+     'score_map')
+)
 
 
 class QFinDASession(object):
@@ -21,6 +26,7 @@ class QFinDASession(object):
         self.models: List[Predictor] = []
         self.performance_measures: List[PerformanceMeasure] = []
         self.validation_data_generator: Optional[Generator[DataContainer]] = None
+        self.model_train_history: Dict[str: List[ModelValidationStat]] = {}
 
     def add_data_from_csv(self, file_path, exclude_fields=(), factor_fields=()):
 
@@ -67,13 +73,26 @@ class QFinDASession(object):
         for data in self.validation_data_generator:
             for model in self.models:
                 model.train(data.train_in, data.train_out)
-                for measure in self.performance_measures:
-                    print("Finished")
-                    print(
-                        "Score is {}".format(
-                            measure.score(
-                                model.predict(data.test_in), pd.concat([x.data for x in data.test_out], axis=1).values
-                            )
-                        )
-                    )
 
+                model_name = model.get_name()
+                if model_name not in self.model_train_history:
+                    self.model_train_history[model_name] = []
+
+                train_ts_range =(data.train_ts[0].data.min(), data.train_ts[0].data.max()) if data.train_ts else None
+                test_ts_range = (data.test_ts[0].data.min(), data.test_ts[0].data.max()) if data.test_ts else None
+                train_securities_range = (data.train_securities[0].data.min(), data.train_securities[0].data.max()) if data.train_securities else None
+                test_securities_range = (data.test_securities[0].data.min(), data.test_ts[0].data.max()) if data.test_securities else None,
+                score_map = {
+                    x.get_name(): x.score(
+                        model.predict(data.test_in), pd.concat([x.data for x in data.test_out], axis=1).values
+                    ) for x in self.performance_measures
+                }
+
+                self.model_train_history[model_name].append(
+                    ModelValidationStats(
+                        name=model_name, train_ts_range=train_ts_range, test_ts_range=test_ts_range,
+                        train_securities_range=train_securities_range, test_securities_range=test_securities_range,
+                        trained_model=model, score_map=score_map
+
+                    )
+                )

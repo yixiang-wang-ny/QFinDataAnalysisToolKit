@@ -8,8 +8,15 @@ class PerformanceMeasure(ABC):
     def score(self, predicted: np.array, true_response: np.array) -> float:
         pass
 
+    @abstractmethod
+    def get_name(self):
+        return
+
 
 class DirectionalAccuracy(PerformanceMeasure):
+
+    def get_name(self):
+        return "DirectionalAccuracy"
 
     def score(self, predicted: np.array, true_response: np.array):
 

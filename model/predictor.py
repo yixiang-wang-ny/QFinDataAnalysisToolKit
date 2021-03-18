@@ -13,3 +13,6 @@ class Predictor(ABC):
     def predict(self, features: [Field]) -> np.array:
         pass
 
+    @abstractmethod
+    def get_name(self):
+        pass
