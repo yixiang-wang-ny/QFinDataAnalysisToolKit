@@ -97,8 +97,6 @@ class QFinDASession(object):
                     )
                 )
 
-                return
-
     def get_trained_model_summary(self):
 
         return {
