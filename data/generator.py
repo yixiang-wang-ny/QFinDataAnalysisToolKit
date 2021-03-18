@@ -53,12 +53,12 @@ class RollingWindowGenerator(ValidationGenerator):
             test_end = test_start + test_window_size - 1
 
             train_ids = distinct_ts_df.iloc[train_start: (train_end+1)].join(ts_df_idx_map)
-            test_ts = distinct_ts_df.iloc[test_start: (test_end+1)].join(ts_df_idx_map)
+            test_ids = distinct_ts_df.iloc[test_start: (test_end+1)].join(ts_df_idx_map)
 
             train_start_idx = train_ids['index'].min()
             train_end_idx = train_ids['index'].max()
-            test_start_dix = test_ts['index'].min()
-            test_end_idx = test_ts['index'].max()
+            test_start_dix = test_ids['index'].min()
+            test_end_idx = test_ids['index'].max()
 
             yield DataContainer(
                 [f.slice(train_start_idx, train_end_idx+1) for f in self.features],
@@ -66,9 +66,9 @@ class RollingWindowGenerator(ValidationGenerator):
                 [f.slice(test_start_dix, test_end_idx+1) for f in self.features],
                 [f.slice(test_start_dix, test_end_idx+1) for f in self.target_columns],
                 [f.slice(train_start_idx, train_end_idx+1) for f in self.ts_ids],
-                [f.slice(test_start_dix, test_start_dix+1) for f in self.ts_ids],
+                [f.slice(test_start_dix, test_end_idx+1) for f in self.ts_ids],
                 [f.slice(train_start_idx, train_end_idx + 1) for f in self.securities_ids],
-                [f.slice(test_start_dix, test_start_dix + 1) for f in self.securities_ids]
+                [f.slice(test_start_dix, test_end_idx + 1) for f in self.securities_ids]
             )
 
 
