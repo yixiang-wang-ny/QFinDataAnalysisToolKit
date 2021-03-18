@@ -17,6 +17,13 @@ class GAM(Predictor):
         self.num_splines = num_splines
         self.model = None
 
+    @property
+    def name(self):
+
+        return "GAM|{}|Splines={}{}".format(
+            self.model_type, self.num_splines, "|lam={}".format(self.lam) if self.lam else ""
+        )
+
     def get_gam_model(self, features: [Field], model_type=TYPE_LINEAR):
 
         model_spec = f(0) if features[0].is_factor() else s(0, n_splines=self.num_splines)
