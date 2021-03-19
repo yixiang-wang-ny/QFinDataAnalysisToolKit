@@ -71,7 +71,6 @@ def main():
     )
 
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
-    wrapped_gam.train()
 
     for data in rolling_window_generator2:
         wrapped_gam.train(data.train_in, data.train_out)
