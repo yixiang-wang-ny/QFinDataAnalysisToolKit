@@ -66,13 +66,8 @@ def main():
     summary = session.get_trained_model_summary()
     print(summary)
 
-    rolling_window_generator2 = session.data.get_rolling_window_generator(
-        train_window_size=20, test_window_size=5, step=100
-    )
-
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
-
-    for data in rolling_window_generator2:
+    for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=100):
         wrapped_gam.train(data.train_in, data.train_out)
 
     return
