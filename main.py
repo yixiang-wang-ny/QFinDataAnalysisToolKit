@@ -4,6 +4,8 @@ from transformation.missing_value_handler import FillWithMean
 from transformation.scaler import MeanDeviationScaler
 from transformation.singular_value_decomposer import PCA
 from model.generative_additive_model import GAM
+from model.tree import RegressionTree
+from model.linear_model import LinearRegression
 from model.criteria import DirectionalAccuracy
 from model.ensemble import DirectionalVotes
 
@@ -60,6 +62,8 @@ def main():
 
     # add models and search
     session.add_model_config(GAM, lam=25000)
+    session.add_model_config(RegressionTree)
+    session.add_model_config(LinearRegression)
     session.add_model_performance_measure(DirectionalAccuracy())
     session.search_models()
 
