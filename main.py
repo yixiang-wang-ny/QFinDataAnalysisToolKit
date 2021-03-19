@@ -62,7 +62,7 @@ def main():
     session.add_model(BaggingByDirectionalVotes.wrap(GAM, lam=25000))
     session.add_model(GAM(lam=25000))
     session.add_model_performance_measure(DirectionalAccuracy())
-    session.kick_off_model_search()
+    session.search_models()
 
     summary = session.get_trained_model_summary()
     print(summary)

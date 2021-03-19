@@ -5,6 +5,7 @@ from model.predictor import Predictor
 from model.criteria import PerformanceMeasure
 from data.generator import ValidationGenerator, DataContainer
 from typing import List, Optional, Generator
+from model.bagging import Bagging
 from collections import namedtuple
 from typing import Dict, List
 import numpy as np
@@ -12,8 +13,7 @@ import numpy as np
 
 ModelValidationStats = namedtuple(
     "ModelValidationStats",
-    ('name', 'train_ts_range', 'test_ts_range', 'train_securities_range', 'test_securities_range', 'trained_model',
-     'score_map')
+    ('name', 'train_ts_range', 'test_ts_range', 'train_securities_range', 'test_securities_range', 'score_map')
 )
 
 
@@ -67,7 +67,12 @@ class QFinDASession(object):
     def set_data_validation_generator(self, generator: ValidationGenerator):
         self.validation_data_generator = generator
 
-    def kick_off_model_search(self):
+    def search_bagged_models(self):
+
+        pass
+
+
+    def search_models(self):
 
         self.run_feature_transformer()
         for data in self.validation_data_generator:
@@ -92,7 +97,7 @@ class QFinDASession(object):
                     ModelValidationStats(
                         name=model_name, train_ts_range=train_ts_range, test_ts_range=test_ts_range,
                         train_securities_range=train_securities_range, test_securities_range=test_securities_range,
-                        trained_model=model, score_map=score_map
+                        score_map=score_map
 
                     )
                 )
