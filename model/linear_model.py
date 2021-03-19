@@ -11,7 +11,7 @@ class LinearRegression(Predictor):
 
     def get_name(self):
 
-        return "RegressionTree"
+        return "LinearRegression"
 
     def train(self, features: [Field], responses: [Field], **kwargs):
 
