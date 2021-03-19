@@ -20,8 +20,6 @@ class PCA(QFinPipe):
 
     def train(self, features: List[Field]):
 
-        # todo: I am aiming to make it work at this moment, but should be made more efficient
-
         self.pca_obj = decomposition.PCA(self.cum_variance_ratio)
         self.pca_obj.fit(pd.concat([feature.data for feature in features], axis=1).values)
 
@@ -29,7 +27,6 @@ class PCA(QFinPipe):
 
     def apply(self, features: List[Field]):
 
-        # todo: same here, need to be optimized in terms of both memory and performance
         out_pcs = self.pca_obj.transform(pd.concat([feature.data for feature in features], axis=1).values)
         out_df = pd.DataFrame(out_pcs, columns=[self.component_prefix + str(i) for i in range(out_pcs.shape[1])])
 
