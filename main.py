@@ -59,13 +59,24 @@ def main():
     session.set_data_validation_generator(rolling_window_generator)
 
     # add models and search
-    # session.add_model(DirectionalVotes.wrap(GAM, lam=25000))
     session.add_model_config(GAM, lam=25000)
     session.add_model_performance_measure(DirectionalAccuracy())
     session.search_models()
 
     summary = session.get_trained_model_summary()
     print(summary)
+
+    rolling_window_generator2 = session.data.get_rolling_window_generator(
+        train_window_size=20, test_window_size=5, step=100
+    )
+
+    wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
+    wrapped_gam.train()
+
+    for data in rolling_window_generator2:
+        wrapped_gam.train(data.train_in, data.train_out)
+
+    return
 
 
 if __name__ == '__main__':
