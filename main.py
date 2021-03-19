@@ -59,8 +59,8 @@ def main():
     session.set_data_validation_generator(rolling_window_generator)
 
     # add models and search
-    session.add_model(BaggingByDirectionalVotes.wrap(GAM, lam=25000))
-    session.add_model(GAM(lam=25000))
+    # session.add_model(BaggingByDirectionalVotes.wrap(GAM, lam=25000))
+    session.add_model_config(GAM, lam=25000)
     session.add_model_performance_measure(DirectionalAccuracy())
     session.search_models()
 

@@ -7,13 +7,15 @@ from data.generator import ValidationGenerator, DataContainer
 from typing import List, Optional, Generator
 from model.bagging import Bagging
 from collections import namedtuple
-from typing import Dict, List
+from typing import Dict, List, ClassVar
 import numpy as np
 
+ModelConfig = namedtuple("ModelConfig", ('model_class', 'args', 'kwargs'))
 
 ModelValidationStats = namedtuple(
     "ModelValidationStats",
-    ('name', 'train_ts_range', 'test_ts_range', 'train_securities_range', 'test_securities_range', 'score_map')
+    ('name', 'train_ts_range', 'test_ts_range', 'train_securities_range', 'test_securities_range', 'trained_model',
+     'score_map')
 )
 
 
@@ -23,7 +25,7 @@ class QFinDASession(object):
 
         self.data_layer = None
         self.feature_transformer = None
-        self.models: List[Predictor] = []
+        self.model_configs: List[ModelConfig] = []
         self.performance_measures: List[PerformanceMeasure] = []
         self.validation_data_generator: Optional[Generator[DataContainer]] = None
         self.model_train_history: Dict[str: List[ModelValidationStats]] = {}
@@ -58,8 +60,8 @@ class QFinDASession(object):
         for f in out_features:
             self.data.field_map[f.name] = f
 
-    def add_model(self, model: Predictor):
-        self.models.append(model)
+    def add_model_config(self, model_class: ClassVar[Predictor], *args, **kwargs):
+        self.model_configs.append(ModelConfig(model_class, args, kwargs))
 
     def add_model_performance_measure(self, measure: PerformanceMeasure):
         self.performance_measures.append(measure)
@@ -71,12 +73,12 @@ class QFinDASession(object):
 
         pass
 
-
-    def search_models(self):
+    def search_models(self, store_trained_models=True):
 
         self.run_feature_transformer()
         for data in self.validation_data_generator:
-            for model in self.models:
+            for model_config in self.model_configs:
+                model = model_config.model_class(*model_config.args, **model_config.kwargs)
                 model.train(data.train_in, data.train_out)
 
                 model_name = model.get_name()
@@ -97,8 +99,7 @@ class QFinDASession(object):
                     ModelValidationStats(
                         name=model_name, train_ts_range=train_ts_range, test_ts_range=test_ts_range,
                         train_securities_range=train_securities_range, test_securities_range=test_securities_range,
-                        score_map=score_map
-
+                        trained_model=model if store_trained_models else None, score_map=score_map
                     )
                 )
 
