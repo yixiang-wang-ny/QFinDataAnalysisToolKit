@@ -10,22 +10,6 @@ from model.criteria import DirectionalAccuracy
 from model.ensemble import DirectionalVotes
 
 
-FEATURE_SPEC_SET = (
-    (1, 2),
-    (3, 6),
-    (7, 8),
-    (9, 16),
-    (17, 40),
-    (41, 53),
-    (54, 54),
-    (55, 59),
-    (60, 68),
-    (69, 71),
-    (72, 119),
-    (120, 129)
-)
-
-
 def main():
 
     session = QFinDASession()
@@ -45,10 +29,12 @@ def main():
     pipe_line = QFinPipeLine()
 
     fill_and_standardize_pipe = FillWithMean(input_features=float_value_feature_names).append(MeanDeviationScaler())
-    pca_pipe = [PCA(input_features=['feature_{}'.format(x) for x in range(s, e+1)]) for s, e in FEATURE_SPEC_SET]
+    pca_pipe = [PCA(input_features=['feature_{}'.format(x) for x in range(s, e+1)]) for s, e in (
+            (1, 2), (3, 6), (7, 8), (9, 16), (17, 40), (41, 53), (54, 54), (55, 59), (60, 68), (69, 71), (72, 119),
+            (120, 129))]
 
     pipe_line.add([PipeSelect(input_features=factor_feature_names), fill_and_standardize_pipe])
-    pipe_line.add([PipeSelect(input_features=factor_feature_names)]+pca_pipe)
+    pipe_line.add([PipeSelect(input_features=factor_feature_names)] + pca_pipe)
 
     session.set_feature_transformer(pipe_line)
 
