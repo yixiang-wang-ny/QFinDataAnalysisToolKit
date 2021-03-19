@@ -7,7 +7,7 @@ import numpy as np
 import datetime as dt
 
 
-class Bagging(Predictor):
+class Ensemble(Predictor):
 
     model_cls: ClassVar[Predictor] = None
     model_args = None
@@ -53,7 +53,7 @@ class Bagging(Predictor):
         return "A Bag Of {}".format(self.model_cls(*self.model_args, **self.model_kwargs).get_name())
 
 
-class BaggingByDirectionalVotes(Bagging):
+class DirectionalVotes(Ensemble):
 
     voting_cutoff = 0.5
 

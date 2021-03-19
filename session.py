@@ -5,7 +5,7 @@ from model.predictor import Predictor
 from model.criteria import PerformanceMeasure
 from data.generator import ValidationGenerator, DataContainer
 from typing import List, Optional, Generator
-from model.bagging import Bagging
+from model.ensemble import Bagging
 from collections import namedtuple
 from typing import Dict, List, ClassVar
 import numpy as np
