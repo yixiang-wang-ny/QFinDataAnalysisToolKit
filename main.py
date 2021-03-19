@@ -44,12 +44,10 @@ def main():
     # set up pipe line
     pipe_line = QFinPipeLine()
 
-    missing_value_pipe = FillWithMean(input_features=float_value_feature_names)
-    scale_pipe = MeanDeviationScaler(input_features=float_value_feature_names)
+    fill_and_standardize_pipe = FillWithMean(input_features=float_value_feature_names).append(MeanDeviationScaler())
     pca_pipe = [PCA(input_features=['feature_{}'.format(x) for x in range(s, e+1)]) for s, e in FEATURE_SPEC_SET]
 
-    pipe_line.add([PipeSelect(input_features=factor_feature_names), missing_value_pipe])
-    pipe_line.add([PipeSelect(input_features=factor_feature_names), scale_pipe])
+    pipe_line.add([PipeSelect(input_features=factor_feature_names), fill_and_standardize_pipe])
     pipe_line.add([PipeSelect(input_features=factor_feature_names)]+pca_pipe)
 
     session.set_feature_transformer(pipe_line)
