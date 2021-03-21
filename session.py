@@ -30,6 +30,9 @@ class QFinDASession(object):
         self.model_train_history: Dict[str: List[ModelValidationStats]] = {}
         self.data_splits = {}
 
+    def get_data_split(self, label):
+        return self.data_layer[label]
+
     def split_data_by_ts_id(self, label, ts_id_cut_off):
 
         self.data_splits[label] = self.data.split_by_ts_id(ts_id_cut_off=ts_id_cut_off)
