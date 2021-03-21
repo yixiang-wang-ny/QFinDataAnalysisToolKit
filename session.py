@@ -31,7 +31,7 @@ class QFinDASession(object):
         self.data_splits = {}
 
     def get_data_split(self, label):
-        return self.data_layer[label]
+        return self.data_splits[label]
 
     def split_data_by_ts_id(self, label, ts_id_cut_off):
 
