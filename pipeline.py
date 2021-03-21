@@ -45,6 +45,22 @@ class QFinPipe(ABC):
 
         return down_stream_res
 
+    def apply_pipe(self, features: [Field]):
+
+        if self.input_features is None:
+            features = self.apply(features)
+        else:
+            features = self.apply([x for x in features if x.name in self.input_features])
+
+        if len(self.down_stream_pipelines) == 0:
+            return features
+
+        down_stream_res = []
+        for down_stream_pipe in self.down_stream_pipelines:
+            down_stream_res.extend(down_stream_pipe.apply_pipe(features))
+
+        return down_stream_res
+
 
 class PipeSelect(QFinPipe):
 
@@ -75,6 +91,18 @@ class QFinPipeLine(object):
             item_res = []
             for pipe in item:
                 item_res.extend(pipe.train_pipe(features))
+
+            features = item_res
+
+        return features
+
+    def apply(self, features: [Field]) -> [Field]:
+
+        for item in self.pipe_items:
+
+            item_res = []
+            for pipe in item:
+                item_res.extend(pipe.apply_pipe(features))
 
             features = item_res
 

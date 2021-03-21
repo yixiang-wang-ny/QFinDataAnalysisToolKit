@@ -43,7 +43,7 @@ def main():
 
     # get data generator
     rolling_window_generator = session.data.get_rolling_window_generator(
-        train_window_size=20, test_window_size=5, step=100
+        train_window_size=20, test_window_size=5, step=250
     )
     session.set_data_validation_generator(rolling_window_generator)
 
@@ -54,15 +54,17 @@ def main():
     session.add_model_performance_measure(DirectionalAccuracy())
     session.search_models()
 
-    summary = session.get_trained_model_summary()
-    print(summary)
+    # summary = session.get_trained_model_summary()
+    # print(summary)
 
+    pipe_line.train(session.data.get_all_features())
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
     for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=100):
         wrapped_gam.train(data.train_in, data.train_out)
 
     test_data = session.get_data_split('TestData')
-    predicted_wrapped = wrapped_gam.predict(test_data.get_all_features())
+    test_features = pipe_line.apply(test_data.get_all_features())
+    predicted_wrapped = wrapped_gam.predict(test_features)
     DirectionalAccuracy().score(predicted_wrapped, test_data.get_target_fields_df().values)
 
     return
