@@ -28,7 +28,7 @@ class Field(object):
 
     @classmethod
     def to_array(cls, fields):
-        return np.concatenate([f.data.values for f in fields], axis=1)
+        return np.array([f.data.values for f in fields]).T
 
     @classmethod
     def from_data_frame(cls, name, underlying_data_frame: pd.DataFrame):
