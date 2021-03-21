@@ -45,8 +45,8 @@ class Data(object):
         split.field_map = OrderedDict()
 
         for k, v in self.field_map.items():
-            split.field_map[k] = v.split(row_cut_off, row_end)
-            self.field_map[k] = v.split(0, row_cut_off-1)
+            split.field_map[k] = v.slice(row_cut_off, row_end)
+            self.field_map[k] = v.slice(0, row_cut_off-1)
 
         return split
 
