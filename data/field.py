@@ -42,6 +42,10 @@ class Field(object):
 
         return obj
 
+    def reset_meta(self, **kwargs):
+
+        self.meta = FieldMeta(**{x: kwargs.get(x, self.meta.__getattribute__(x)) for x in FieldMeta._fields})
+
     def get_data(self) -> np.array:
         return self.data.values
 

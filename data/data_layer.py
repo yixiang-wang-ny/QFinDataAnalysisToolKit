@@ -61,7 +61,7 @@ class Data(object):
 
             field = Field.from_data_frame(col, df)
             if field.name in factor_fields:
-                field._is_factor = True
+                field.reset_meta(isFactor=True)
 
             self.field_map[field.name] = field
 
