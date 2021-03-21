@@ -57,7 +57,7 @@ def main():
     # summary = session.get_trained_model_summary()
     # print(summary)
 
-    pipe_line.train(session.data.get_all_features())
+    session.run_feature_transformer()
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
     for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=100):
         wrapped_gam.train(data.train_in, data.train_out)
