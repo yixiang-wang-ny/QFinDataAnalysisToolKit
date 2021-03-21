@@ -100,17 +100,33 @@ class Data(object):
             if k not in self.securities_id_columns and k not in self.ts_id_columns and k not in self.target_columns
         ]
 
+    def get_all_features_df(self) -> pd.DataFrame:
+
+        return pd.concat([f.data for f in self.get_all_features()], axis=1)
+
     def get_ts_ids(self) -> [Field]:
 
         return [v for k, v in self.field_map.items() if k in self.ts_id_columns]
+
+    def get_ts_ids_df(self) -> pd.DataFrame:
+
+        return pd.concat([f.data for f in self.get_ts_ids()], axis=1)
 
     def get_securities_ids(self) -> [Field]:
 
         return [v for k, v in self.field_map.items() if k in self.securities_id_columns]
 
+    def get_securities_ids_df(self) -> pd.DataFrame:
+
+        return pd.concat([f.data for f in self.get_securities_ids()], axis=1)
+
     def get_target_fields(self) -> [Field]:
 
         return [v for k, v in self.field_map.items() if k in self.target_columns]
+
+    def get_target_fields_df(self) -> pd.DataFrame:
+
+        return pd.concat([f.data for f in self.get_target_fields()], axis=1)
 
     def get_field_names(self):
 

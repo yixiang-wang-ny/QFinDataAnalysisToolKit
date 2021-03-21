@@ -8,6 +8,7 @@ from model.tree import RegressionTree
 from model.linear_model import LinearRegression
 from model.criteria import DirectionalAccuracy
 from model.ensemble import DirectionalVotes
+import pandas as pd
 
 
 def main():
@@ -61,6 +62,8 @@ def main():
         wrapped_gam.train(data.train_in, data.train_out)
 
     test_data = session.get_data_split('TestData')
+    predicted_wrapped = wrapped_gam.predict(test_data.get_all_features())
+    DirectionalAccuracy().score(predicted_wrapped, test_data.get_target_fields_df().values)
 
     return
 
