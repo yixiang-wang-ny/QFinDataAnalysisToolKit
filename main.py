@@ -52,14 +52,14 @@ def main():
     session.add_model_config(RegressionTree)
     session.add_model_config(LinearRegression)
     session.add_model_performance_measure(DirectionalAccuracy())
-    session.search_models()
+    # session.search_models()
 
     # summary = session.get_trained_model_summary()
     # print(summary)
 
     session.run_feature_transformer()
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
-    for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=100):
+    for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=250):
         wrapped_gam.train(data.train_in, data.train_out)
 
     test_data = session.get_data_split('TestData')
