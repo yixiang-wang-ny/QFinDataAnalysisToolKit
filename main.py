@@ -13,6 +13,7 @@ from model.ensemble import DirectionalVotes
 def main():
 
     session = QFinDASession()
+    # data source: https://www.kaggle.com/c/jane-street-market-prediction/data
     session.add_data_from_csv(
         r'C:\Users\yixia\OneDrive\Files\Kaggle\jane-street-market-prediction\train.csv',
         exclude_fields=['resp_1', 'resp_2', 'resp_3', 'resp_4', 'ts_id', 'weight'],
