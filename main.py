@@ -60,6 +60,8 @@ def main():
     for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=100):
         wrapped_gam.train(data.train_in, data.train_out)
 
+    test_data = session.get_data_split('TestData')
+
     return
 
 
