@@ -80,7 +80,7 @@ class QFinDASession(object):
 
         pass
 
-    def search_models(self, store_trained_models=True):
+    def kick_off(self, store_trained_models=True):
 
         self.run_feature_transformer()
         for data in self.validation_data_generator:
