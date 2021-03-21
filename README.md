@@ -1,12 +1,10 @@
 # QFinDataAnalysisToolKit
 Features:
 
-- Extensible and compatible with major ML/AI libraries
+- extensible and reusable
 
-- efficient memory management
+- compatible with major Stats/ML/AI libraries
 
-- auto initial model search
+- efficient memory management and easy feature engineering with per field configuration
 
-- portable
-
-- easy feature engineering
+- quick initial model search
