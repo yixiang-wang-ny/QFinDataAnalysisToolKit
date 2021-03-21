@@ -23,6 +23,14 @@ class Field(object):
         raise RuntimeError("Please use one of the factory methods")
 
     @classmethod
+    def to_data_frame(cls, fields):
+        return pd.concat([f.data.reset_index(drop=True) for f in fields], axis=1)
+
+    @classmethod
+    def to_array(cls, fields):
+        return np.concatenate([f.data.values for f in fields], axis=1)
+
+    @classmethod
     def from_data_frame(cls, name, underlying_data_frame: pd.DataFrame):
 
         obj = cls.__new__(cls)

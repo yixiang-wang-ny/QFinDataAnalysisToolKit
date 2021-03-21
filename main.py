@@ -58,11 +58,12 @@ def main():
     # print(summary)
 
     session.run_feature_transformer()
+    test_data = session.get_data_split('TestData')
+
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
     for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=250):
         wrapped_gam.train(data.train_in, data.train_out)
 
-    test_data = session.get_data_split('TestData')
     test_features = pipe_line.apply(test_data.get_all_features())
     predicted_wrapped = wrapped_gam.predict(test_features)
     DirectionalAccuracy().score(predicted_wrapped, test_data.get_target_fields_df().values)

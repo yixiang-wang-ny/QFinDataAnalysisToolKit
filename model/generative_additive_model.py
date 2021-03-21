@@ -51,4 +51,4 @@ class GAM(Predictor):
 
     def predict(self, features: [Field]):
 
-        return self.model.predict(pd.concat([x.data for x in features], axis=1).values)
+        return self.model.predict(Field.to_array(features))
