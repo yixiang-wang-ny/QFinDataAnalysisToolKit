@@ -43,7 +43,7 @@ def main():
 
     # get data generator
     rolling_window_generator = session.data.get_rolling_window_generator(
-        train_window_size=20, test_window_size=5, step=250
+        train_window_size=20, test_window_size=5, step=20
     )
     session.set_data_validation_generator(rolling_window_generator)
 
@@ -59,7 +59,7 @@ def main():
     print(summary)
 
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
-    for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=250):
+    for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=20):
         wrapped_gam.train(data.train_in, data.train_out)
 
     test_data = session.get_data_split('TestData')
