@@ -28,6 +28,11 @@ class QFinDASession(object):
         self.performance_measures: List[PerformanceMeasure] = []
         self.validation_data_generator: Optional[Generator[DataContainer]] = None
         self.model_train_history: Dict[str: List[ModelValidationStats]] = {}
+        self.data_splits = {}
+
+    def split_data_by_ts_id(self, label, ts_id_cut_off):
+
+        self.data_splits[label] = self.data.split_by_ts_id(ts_id_cut_off=ts_id_cut_off)
 
     def add_data_from_csv(self, file_path, exclude_fields=(), factor_fields=()):
 

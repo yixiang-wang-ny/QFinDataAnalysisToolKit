@@ -3,6 +3,8 @@ import pandas as pd
 from data.field import Field
 from collections import OrderedDict
 import data.generator as generator
+from typing import Iterable
+from copy import deepcopy
 
 
 class Data(object):
@@ -16,6 +18,37 @@ class Data(object):
         self.ts_id_columns = []
         self.target_columns = []
         self.field_map = OrderedDict()
+
+    def split_by_ts_id(self, ts_id_cut_off):
+
+        columns = [self.field_map[f].data.name for f in self.ts_id_columns]
+        ts_id_df = pd.concat(
+            [self.field_map[f].data.reset_index(drop=True) for f in self.ts_id_columns], axis=1
+        ).reset_index()
+        ts_id_df.set_index(columns, inplace=True)
+
+        if isinstance(ts_id_cut_off, Iterable):
+            ts_id_cut_off = tuple(ts_id_cut_off)
+
+        row_cut_off = ts_id_df.loc[ts_id_cut_off:].iloc[0]['index']
+        return self.split_by_row(row_cut_off)
+
+    def split_by_row(self, row_cut_off):
+
+        row_end = len(list(self.field_map.values())[0].data)
+
+        split = Data.__new__(Data)
+        split.data_id = "{}-{}".format(self.data_id, 'split-{}-to-{}'.format(row_cut_off, row_end))
+        split.securities_id_columns = deepcopy(self.securities_id_columns)
+        split.ts_id_columns = deepcopy(self.ts_id_columns)
+        split.target_columns = deepcopy(self.target_columns)
+        split.field_map = OrderedDict()
+
+        for k, v in self.field_map.items():
+            split.field_map[k] = v.split(row_cut_off, row_end)
+            self.field_map[k] = v.split(0, row_cut_off-1)
+
+        return split
 
     def add_from_data_frame(self, df, exclude_fields, factor_fields=()):
 

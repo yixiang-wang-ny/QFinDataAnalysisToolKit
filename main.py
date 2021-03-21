@@ -21,6 +21,7 @@ def main():
     )
     session.data.set_time_series_id('date')
     session.data.set_target_fields('resp')
+    session.split_data_by_ts_id('TestData', 450)
 
     features = session.data.get_all_features()
     factor_feature_names = [x.name for x in features if x.is_factor()]
