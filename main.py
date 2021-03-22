@@ -6,7 +6,7 @@ from transformation.singular_value_decomposer import PCA
 from model.generative_additive_model import GAM
 from model.tree import RegressionTree
 from model.linear_model import LinearRegression
-from model.criteria import DirectionalAccuracy
+from model.criteria import DirectionalAccuracy, BuySignalDirectionalAccuracy
 from model.ensemble import DirectionalVotes
 import pandas as pd
 
@@ -60,6 +60,7 @@ def main():
 
     # model ensemble with decorator
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
+    wrapped_gam.set_cutoff_rate(0.75)
     for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=20):
         wrapped_gam.train(data.train_in, data.train_out)
 
@@ -67,7 +68,7 @@ def main():
     test_features = pipe_line.apply(test_data.get_all_features())
     predicted_wrapped = wrapped_gam.predict(test_features)
     print("Wrapped model accuracy is {}".format(
-        DirectionalAccuracy().score(predicted_wrapped, test_data.get_target_fields_df().values)
+        BuySignalDirectionalAccuracy().score(predicted_wrapped, test_data.get_target_fields_df().values)
     ))
 
     return

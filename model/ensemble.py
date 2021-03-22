@@ -57,6 +57,10 @@ class DirectionalVotes(Ensemble):
 
     voting_cutoff = 0.5
 
+    def set_cutoff_rate(self, rate):
+
+        self.voting_cutoff = rate
+
     def aggregate(self, features: [Field], models: List[Predictor]) -> np.array:
 
         length = len(features[0].data)
