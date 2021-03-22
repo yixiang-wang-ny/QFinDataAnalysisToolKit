@@ -58,6 +58,7 @@ def main():
     summary = session.get_trained_model_summary()
     print(summary)
 
+    # model ensemble with decorator
     wrapped_gam = DirectionalVotes.wrap(GAM, lam=25000)
     for data in session.data.get_rolling_window_generator(train_window_size=20, test_window_size=5, step=20):
         wrapped_gam.train(data.train_in, data.train_out)
