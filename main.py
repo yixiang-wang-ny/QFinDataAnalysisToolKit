@@ -51,6 +51,8 @@ def main():
     session.add_model_config(GAM, lam=25000)
     session.add_model_config(RegressionTree)
     session.add_model_config(LinearRegression)
+
+    session.add_model_performance_measure(BuySignalDirectionalAccuracy())
     session.add_model_performance_measure(DirectionalAccuracy())
     
     session.kick_off()
