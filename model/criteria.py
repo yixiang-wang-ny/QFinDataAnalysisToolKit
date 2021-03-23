@@ -50,5 +50,9 @@ class BuySignalDirectionalAccuracy(PerformanceMeasure):
                 else:
                     wrong_guess += 1
 
-        return correct_guess / float(correct_guess+wrong_guess)
+        total_count = correct_guess + wrong_guess
+        if total_count == 0:
+            return 0.0
+        else:
+            return correct_guess / total_count
 
