@@ -51,7 +51,7 @@ class BuySignalDirectionalAccuracy(PerformanceMeasure):
                     wrong_guess += 1
 
         total_count = correct_guess + wrong_guess
-        
+
         if total_count == 0:
             return 0.0
         else:
