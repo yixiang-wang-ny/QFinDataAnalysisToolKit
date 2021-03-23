@@ -10,7 +10,7 @@ class VanillaMultiLayerPerceptron(Predictor):
 
     def __init__(self, hidden_layer_num_units: List[int], output_activation: str = 'linear',
                  hidden_layer_activation: str = 'relu',
-                 use_bias: bool = True, loss: str = 'categorical_crossentropy'):
+                 use_bias: bool = True, loss: str = 'mean_squared_error'):
         self.model = None
         self.hidden_layer_num_units = hidden_layer_num_units
         self.output_activation = output_activation
